@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
-    tools:context=".MainActivity">
+    tools:context=".SignInActivity">
 
     <TextView
         android:id="@+id/textView2"
@@ -58,7 +58,8 @@
         app:layout_constraintBottom_toTopOf="@+id/textView3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        style="?android:attr/borderlessButtonStyle"/>
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -80,7 +81,8 @@
             android:background="@color/colorAccent"
             android:text="@string/customer"
             android:textAllCaps="false"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            style="?android:attr/borderlessButtonStyle"/>
 
         <Button
             android:id="@+id/button3"
@@ -91,7 +93,8 @@
             android:text="@string/driver"
             android:textAllCaps="false"
             android:textColor="@color/colorAccent"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            style="?android:attr/borderlessButtonStyle"/>
     </LinearLayout>
 
     <ImageView
