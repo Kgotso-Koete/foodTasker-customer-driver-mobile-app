@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">FoodTasker</string>
+    <string name="use_a_different_account">USE A DIFFERENT ACCOUNT</string>
+    <string name="created_by_kgotso_koete">Created by Kgotso Koete</string>
+    <string name="foodtasker">FoodTasker</string>
+    <string name="login_with_facebook">Login with Facebook</string>
+    <string name="customer">Customer</string>
+    <string name="driver">Driver</string>
+    <string name="todo">TODO</string>
+</resources>
