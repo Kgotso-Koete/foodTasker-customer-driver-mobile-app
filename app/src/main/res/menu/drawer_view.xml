@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/nav_restaurant" android:icon="@drawable/icon_restaurants" android:title="@string/restaurant"/>
+    <item android:id="@+id/nav_tray" android:icon="@drawable/icon_tray" android:title="@string/tray"/>
+    <item android:id="@+id/nav_order" android:icon="@drawable/icon_order" android:title="@string/order"/>
+    <item android:id="@+id/nav_logout" android:icon="@drawable/icon_logout" android:title="@string/logout"/>
+
+</menu>

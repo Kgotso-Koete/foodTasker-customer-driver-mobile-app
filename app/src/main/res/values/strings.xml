@@ -7,4 +7,10 @@
     <string name="customer">Customer</string>
     <string name="driver">Driver</string>
     <string name="todo">TODO</string>
+    <string name="restaurant">Restaurant</string>
+    <string name="tray">Tray</string>
+    <string name="order">Order</string>
+    <string name="logout">Logout</string>
+    <string name="kgotso_koete">Kgotso Koete</string>
+    <string name="todo2">TODO2</string>
 </resources>
