@@ -67,6 +67,21 @@ public class CustomerMainActivity extends AppCompatActivity {
                         // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
 
+                        // Add code here to update the UI based on the item selected
+                        // For example, swap UI fragments here
+
+                        int id = menuItem.getItemId();
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        if (id == R.id.nav_restaurant) {
+                            transaction.replace(R.id.content_frame, new RestaurantListFragment()).commit();
+                        } else if (id == R.id.nav_tray) {
+                            transaction.replace(R.id.content_frame, new TrayFragment()).commit();
+                        } else if (id == R.id.nav_order) {
+
+                        } else if (id == R.id.nav_logout) {
+
+                        }
+
                         return true;
                     }
                 });

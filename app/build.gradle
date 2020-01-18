@@ -50,3 +50,17 @@ dependencies {
     implementation 'com.stripe:stripe-android:6.1.2'
     //implementation 'com.github.ar-android:DrawRouteMaps:1.0.0'
 }
+
+// Google maps and other API keys
+def apikeyPropertiesFile = rootProject.file("apikey.properties")
+def apikeyProperties = new Properties()
+apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+
+android {
+
+    defaultConfig {
+
+        // should correspond to key/value pairs inside the file
+        buildConfigField("String", "GOOGLE_MAPS_API_KEY", apikeyProperties['GOOGLE_MAPS_API_KEY'])
+    }
+}
