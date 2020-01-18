@@ -1,14 +1,39 @@
 package com.example.foodtasker;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
-import androidx.drawerlayout.widget.DrawerLayout;
-import com.google.android.material.navigation.NavigationView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.appcompat.app.ActionBar;
-import androidx.core.view.GravityCompat;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+//import com.example.foodtasker.Utils.CircleTransform;
+//import com.example.foodtasker.Fragments.OrderFragment;
+import com.example.foodtasker.R;
+import com.example.foodtasker.RestaurantListFragment;
+//import com.example.foodtasker.Fragments.TrayFragment;
+import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class CustomerMainActivity extends AppCompatActivity {
 
@@ -45,6 +70,9 @@ public class CustomerMainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.content_frame, new RestaurantListFragment()).commit();
     }
 
     @Override
