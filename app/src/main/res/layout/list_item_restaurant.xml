@@ -1,0 +1,43 @@
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/res_logo"
+        android:layout_width="0dp"
+        android:layout_height="225dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/blank_image"
+        android:contentDescription="@string/todo" />
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="22dp"
+        android:layout_marginStart="22dp"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/res_logo"
+        app:layout_constraintEnd_toEndOf="@+id/res_logo"
+        app:layout_constraintStart_toStartOf="@+id/res_logo">
+        <TextView
+            android:id="@+id/res_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:text="@string/restaurant_name"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/res_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/restaurant_address"
+            android:textSize="16sp"/>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

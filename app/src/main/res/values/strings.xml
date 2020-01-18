@@ -15,5 +15,8 @@
     <string name="todo2">TODO2</string>
     <string name="profile_pic">profile_pic</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="restaurant_name">Restaurant Name</string>
+    <string name="restaurant_address">Restaurant Address</string>
+    <string name="search_restaurant">Search restaurant</string>
 
 </resources>
