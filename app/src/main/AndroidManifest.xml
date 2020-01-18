@@ -12,10 +12,20 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="GOOGLE_MAPS_API_KEY"/>
+            android:value="GOOGLE_MAPS_API_KEY" />
 
-        <activity android:name=".CustomerMainActivity"></activity>
+        <activity
+            android:name=".CustomerMainActivity"
+            android:launchMode="singleTop"/>
+
+        <activity
+            android:name=".MealListActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".CustomerMainActivity"
+            android:theme="@style/AppTheme.ActionBar"/>
+
         <activity android:name=".SignInActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

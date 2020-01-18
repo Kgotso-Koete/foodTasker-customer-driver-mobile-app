@@ -22,8 +22,10 @@
     <string name="burger_king">Burger King</string>
     <string name="_10_00">$10.00</string>
     <string name="total">Total</string>
-    <string name="_12_00">$12.00</string>
     <string name="address">Address</string>
     <string name="on_the_way">ON THE WAY</string>
+    <string name="most_popular">Most Popular</string>
+    <string name="this_is_a_great_burger">This is a great burger</string>
+    <string name="_12_00">$12.00</string>
 
 </resources>
