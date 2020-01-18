@@ -22,11 +22,15 @@
             android:launchMode="singleTop"
             android:parentActivityName=".CustomerMainActivity"
             android:theme="@style/AppTheme.ActionBar" />
-
         <activity
             android:name=".MealDetailActivity"
             android:launchMode="singleTop"
             android:parentActivityName=".MealListActivity"
+            android:theme="@style/AppTheme.ActionBar" />
+
+        <activity
+            android:name=".PaymentActivity"
+            android:parentActivityName=".CustomerMainActivity"
             android:theme="@style/AppTheme.ActionBar" />
 
         <activity android:name=".SignInActivity">
@@ -36,7 +40,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

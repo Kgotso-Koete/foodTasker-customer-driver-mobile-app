@@ -33,5 +33,6 @@
     <string name="plusSign">+</string>
     <string name="minusSign">-</string>
     <string name="empty_string" />
+    <string name="place_order">PLACE ORDER</string>
 
 </resources>

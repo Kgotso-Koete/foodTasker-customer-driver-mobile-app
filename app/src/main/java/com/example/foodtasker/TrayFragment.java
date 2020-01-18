@@ -98,6 +98,17 @@ public class TrayFragment extends Fragment {
                 return LayoutInflater.from(getActivity()).inflate(R.layout.list_item_tray, null);
             }
         });
+
+        Button buttonLogin = (Button) getActivity().findViewById(R.id.button_add_payment);
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getContext(), PaymentActivity.class);
+                startActivity(intent);
+
+            }
+        });
     }
 
 }
