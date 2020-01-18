@@ -25,6 +25,8 @@ public class CustomerMainActivity extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.icon_menu_24dp);
+        // remove title from action bar
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 
         mDrawerLayout = findViewById(R.id.drawer_layout);

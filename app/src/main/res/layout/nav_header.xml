@@ -8,12 +8,13 @@
     android:orientation="horizontal"
     android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
     <ImageView
         android:id="@+id/customer_avatar"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        app:srcCompat="@mipmap/ic_launcher_round"
-        android:contentDescription="@string/todo" />
+        android:contentDescription="@string/profile_pic"
+        app:srcCompat="@mipmap/ic_launcher_round" />
     <TextView
         android:id="@+id/customer_name"
         android:layout_width="0dp"
