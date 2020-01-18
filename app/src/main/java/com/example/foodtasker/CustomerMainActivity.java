@@ -77,7 +77,7 @@ public class CustomerMainActivity extends AppCompatActivity {
                         } else if (id == R.id.nav_tray) {
                             transaction.replace(R.id.content_frame, new TrayFragment()).commit();
                         } else if (id == R.id.nav_order) {
-
+                            transaction.replace(R.id.content_frame, new OrderFragment()).commit();
                         } else if (id == R.id.nav_logout) {
 
                         }
