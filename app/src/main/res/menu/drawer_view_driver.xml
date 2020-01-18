@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_orders"
+        android:icon="@drawable/icon_order"
+        android:title="@string/driver_orders" />
+    <item
+        android:id="@+id/nav_delivery"
+        android:icon="@drawable/icon_delivery"
+        android:title="@string/driver_delivery" />
+    <item
+        android:id="@+id/nav_statistic"
+        android:icon="@drawable/icon_statistic"
+        android:title="@string/statistics" />
+    <item
+        android:id="@+id/nav_logout"
+        android:icon="@drawable/icon_logout"
+        android:title="@string/driver_logout" />
+</menu>

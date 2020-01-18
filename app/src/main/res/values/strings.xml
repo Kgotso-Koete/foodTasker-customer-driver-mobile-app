@@ -34,5 +34,9 @@
     <string name="minusSign">-</string>
     <string name="empty_string" />
     <string name="place_order">PLACE ORDER</string>
+    <string name="driver_orders">Orders</string>
+    <string name="driver_delivery">Delivery</string>
+    <string name="statistics">Statistics</string>
+    <string name="driver_logout">Logout</string>
 
 </resources>
