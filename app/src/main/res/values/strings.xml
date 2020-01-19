@@ -42,5 +42,6 @@
     <string name="customer_name_">Customer Name</string>
     <string name="customer_profile_image">Customer image</string>
     <string name="customer_address_">Customer Address</string>
+    <string name="complete_order_">COMPLETE ORDER</string>
 
 </resources>

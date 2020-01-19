@@ -74,7 +74,7 @@ public class DriverMainActivity extends AppCompatActivity {
                         if (id == R.id.nav_orders) {
                             transaction.replace(R.id.content_frame, new OrderListFragment()).commit();
                         } else if (id == R.id.nav_delivery) {
-
+                            transaction.replace(R.id.content_frame, new DeliveryFragment()).commit();
                         } else if (id == R.id.nav_statistic) {
 
                         } else if (id == R.id.nav_logout) {
