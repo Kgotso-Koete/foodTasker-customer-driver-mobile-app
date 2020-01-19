@@ -38,5 +38,9 @@
     <string name="driver_delivery">Delivery</string>
     <string name="statistics">Statistics</string>
     <string name="driver_logout">Logout</string>
+    <string name="restaurant_name_">Restaurant Name</string>
+    <string name="customer_name_">Customer Name</string>
+    <string name="customer_profile_image">Customer image</string>
+    <string name="customer_address_">Customer Address</string>
 
 </resources>
