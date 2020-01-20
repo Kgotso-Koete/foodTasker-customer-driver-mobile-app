@@ -40,6 +40,8 @@ import java.util.Arrays;
  */
 public class RestaurantListFragment extends Fragment {
 
+    String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
+
 
     public RestaurantListFragment() {
         // Required empty public constructor
@@ -86,6 +88,35 @@ public class RestaurantListFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        // Get list of restaurants
+        getRestaurants();
+    }
+
+    private void getRestaurants() {
+        String url = LOCAL_API_URL + "/customer/restaurants/";
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("RESTAURANTS LIST", response.toString());
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        );
+
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        queue.add(jsonObjectRequest);
     }
 
 }

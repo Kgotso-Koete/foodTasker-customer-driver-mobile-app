@@ -39,7 +39,7 @@ public class SignInActivity extends AppCompatActivity {
 
     String CLIENT_ID = BuildConfig.CLIENT_ID;
     String CLIENT_SECRET = BuildConfig.CLIENT_SECRET;
-    String API_URL = BuildConfig.API_URL;
+    String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
 
 
     @Override
@@ -184,7 +184,7 @@ public class SignInActivity extends AppCompatActivity {
         buttonLogin.setClickable(false);
         buttonLogin.setBackgroundColor(getResources().getColor(R.color.colorLightGray));
 
-        String url = API_URL + "/social/convert-token";
+        String url = LOCAL_API_URL + "/social/convert-token";
 
         JSONObject jsonBody = new JSONObject();
         try {

@@ -42,7 +42,7 @@ public class CustomerMainActivity extends AppCompatActivity {
 
     String CLIENT_ID = BuildConfig.CLIENT_ID;
     String CLIENT_SECRET = BuildConfig.CLIENT_SECRET;
-    String API_URL = BuildConfig.API_URL;
+    String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +128,7 @@ public class CustomerMainActivity extends AppCompatActivity {
     }
 
     private void logoutToServer(final String token) {
-        String url = API_URL + "/social/revoke-token";
+        String url = LOCAL_API_URL + "/social/revoke-token";
 
         StringRequest postRequest = new StringRequest
                 (Request.Method.POST, url, new Response.Listener<String>() {

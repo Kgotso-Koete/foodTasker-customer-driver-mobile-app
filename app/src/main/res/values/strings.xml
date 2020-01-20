@@ -45,6 +45,7 @@
     <string name="complete_order_">COMPLETE ORDER</string>
     <string name="facebook_app_id">2600629376689417</string>
     <string name="fb_login_protocol_scheme">fb2600629376689417</string>
+    <string name="API_URL">https://arcane-spire-07518.herokuapp.com/api</string>
 
 
 </resources>
