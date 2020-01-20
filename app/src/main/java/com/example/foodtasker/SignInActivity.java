@@ -37,6 +37,11 @@ public class SignInActivity extends AppCompatActivity {
     private SharedPreferences sharedPref;
     private Button buttonLogin;
 
+    String CLIENT_ID = BuildConfig.CLIENT_ID;
+    String CLIENT_SECRET = BuildConfig.CLIENT_SECRET;
+    String API_URL = BuildConfig.API_URL;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,17 +82,15 @@ public class SignInActivity extends AppCompatActivity {
 
                 if (AccessToken.getCurrentAccessToken() == null) {
                     LoginManager.getInstance().logInWithReadPermissions(SignInActivity.this, Arrays.asList("public_profile", "email"));
-                }
+                } else {
+                    ColorDrawable customerbuttonColor = (ColorDrawable) customerButton.getBackground();
 
-//                ColorDrawable customerbuttonColor = (ColorDrawable) customerButton.getBackground();
-//
-//                if (customerbuttonColor.getColor() == getResources().getColor(R.color.colorAccent)) {
-//                    Intent intent = new Intent(getApplicationContext(), CustomerMainActivity.class);
-//                    startActivity(intent);
-//                } else {
-//                    Intent intent = new Intent(getApplicationContext(), DriverMainActivity.class);
-//                    startActivity(intent);
-//                }
+                    if (customerbuttonColor.getColor() == getResources().getColor(R.color.colorAccent)) {
+                        loginToServer(AccessToken.getCurrentAccessToken().getToken(), "customer");
+                    } else {
+                        loginToServer(AccessToken.getCurrentAccessToken().getToken(), "driver");
+                    }
+                }
             }
         });
 
@@ -131,6 +134,14 @@ public class SignInActivity extends AppCompatActivity {
                         parameters.putString("fields", "id,name,email,picture");
                         request.setParameters(parameters);
                         request.executeAsync();
+
+                        ColorDrawable customerbuttonColor = (ColorDrawable) customerButton.getBackground();
+
+                        if (customerbuttonColor.getColor() == getResources().getColor(R.color.colorAccent)) {
+                            loginToServer(AccessToken.getCurrentAccessToken().getToken(), "customer");
+                        } else {
+                            loginToServer(AccessToken.getCurrentAccessToken().getToken(), "driver");
+                        }
                     }
 
                     @Override
@@ -166,5 +177,60 @@ public class SignInActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void loginToServer(String facebookAccessToken, final String userType) {
+
+        String url = API_URL + "/social/convert-token";
+
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("grant_type", "convert_token");
+            jsonBody.put("client_id", CLIENT_ID);
+            jsonBody.put("client_secret", CLIENT_SECRET);
+            jsonBody.put("backend", "facebook");
+            jsonBody.put("token", facebookAccessToken);
+            jsonBody.put("user_type", userType);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // Execute code
+                        Log.d("LOGIN TO SERVER", response.toString());
+
+                        // Shave server token to local database
+                        SharedPreferences.Editor editor = sharedPref.edit();
+
+                        try {
+                            editor.putString("token", response.getString("access_token"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        editor.commit();
+
+                        // Start main activity
+                        if (userType.equals("customer")) {
+                            Intent intent = new Intent(getApplicationContext(), CustomerMainActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(getApplicationContext(), DriverMainActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(jsonObjectRequest);
     }
 }
