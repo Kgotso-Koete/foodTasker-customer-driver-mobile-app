@@ -43,5 +43,8 @@
     <string name="customer_profile_image">Customer image</string>
     <string name="customer_address_">Customer Address</string>
     <string name="complete_order_">COMPLETE ORDER</string>
+    <string name="facebook_app_id">2600629376689417</string>
+    <string name="fb_login_protocol_scheme">fb2600629376689417</string>
+
 
 </resources>

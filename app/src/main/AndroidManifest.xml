@@ -9,29 +9,55 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DriverMainActivity"></activity>
+
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="GOOGLE_MAPS_API_KEY" />
 
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
+
+
         <activity
             android:name=".CustomerMainActivity"
             android:launchMode="singleTop" />
+
         <activity
             android:name=".MealListActivity"
             android:launchMode="singleTop"
             android:parentActivityName=".CustomerMainActivity"
             android:theme="@style/AppTheme.ActionBar" />
+
         <activity
             android:name=".MealDetailActivity"
             android:launchMode="singleTop"
             android:parentActivityName=".MealListActivity"
             android:theme="@style/AppTheme.ActionBar" />
+
         <activity
             android:name=".PaymentActivity"
             android:parentActivityName=".CustomerMainActivity"
             android:theme="@style/AppTheme.ActionBar" />
+
         <activity android:name=".SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,6 +65,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".DriverMainActivity"></activity>
+
     </application>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
 
 </manifest>
