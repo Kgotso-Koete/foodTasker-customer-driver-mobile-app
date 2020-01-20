@@ -35,6 +35,7 @@ public class SignInActivity extends AppCompatActivity {
     private Button customerButton, driverButton;
     private CallbackManager callbackManager;
     private SharedPreferences sharedPref;
+    private Button buttonLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,7 @@ public class SignInActivity extends AppCompatActivity {
         customerButton = (Button) findViewById(R.id.button_customer);
         driverButton = (Button) findViewById(R.id.button_driver);
 
-        // Handle customer button: switch colours when pressed
+        // Handle Customer Button
         customerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,7 +57,7 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
-        // Handle driver button: switch colours when pressed
+        // Handle Driver Button
         driverButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,14 +69,15 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
-
-        // Handle log in
-        Button buttonLogin = (Button) findViewById(R.id.button_login);
+        // Handle Login Button
+        buttonLogin = (Button) findViewById(R.id.button_login);
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                LoginManager.getInstance().logInWithReadPermissions(SignInActivity.this, Arrays.asList("public_profile", "email"));
+                if (AccessToken.getCurrentAccessToken() == null) {
+                    LoginManager.getInstance().logInWithReadPermissions(SignInActivity.this, Arrays.asList("public_profile", "email"));
+                }
 
 //                ColorDrawable customerbuttonColor = (ColorDrawable) customerButton.getBackground();
 //
@@ -93,10 +95,14 @@ public class SignInActivity extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
         sharedPref = getSharedPreferences("MY_KEY", Context.MODE_PRIVATE);
 
+        final Button buttonLogout = (Button) findViewById(R.id.button_logout);
+        buttonLogout.setVisibility(View.GONE);
+
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
+                        // App code
                         Log.d("FACEBOOK TOKEN", loginResult.getAccessToken().getToken());
 
                         GraphRequest request = GraphRequest.newMeRequest(
@@ -119,11 +125,10 @@ public class SignInActivity extends AppCompatActivity {
                                             e.printStackTrace();
                                         }
                                         editor.commit();
-
                                     }
                                 });
                         Bundle parameters = new Bundle();
-                        parameters.putString("fields", "id,name,email, picture");
+                        parameters.putString("fields", "id,name,email,picture");
                         request.setParameters(parameters);
                         request.executeAsync();
                     }
@@ -138,11 +143,22 @@ public class SignInActivity extends AppCompatActivity {
                         // App code
                     }
                 });
+
         if (AccessToken.getCurrentAccessToken() != null) {
             Log.d("USER", sharedPref.getAll().toString());
             buttonLogin.setText("Continue as " + sharedPref.getString("email", ""));
+            buttonLogout.setVisibility(View.VISIBLE);
         }
 
+        // Handle Logout button
+        buttonLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LoginManager.getInstance().logOut();
+                buttonLogin.setText("Login with Facebook");
+                buttonLogout.setVisibility(View.GONE);
+            }
+        });
     }
 
 
