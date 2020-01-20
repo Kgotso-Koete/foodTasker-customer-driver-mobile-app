@@ -79,6 +79,9 @@ public class DriverMainActivity extends AppCompatActivity {
                         } else if (id == R.id.nav_statistic) {
                             transaction.replace(R.id.content_frame, new StatisticFragment()).commit();
                         } else if (id == R.id.nav_logout) {
+                            finishAffinity();
+                            Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
+                            startActivity(intent);
 
                         }
 
@@ -108,5 +111,9 @@ public class DriverMainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 }

@@ -180,6 +180,9 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void loginToServer(String facebookAccessToken, final String userType) {
+        buttonLogin.setText("LOADING...");
+        buttonLogin.setClickable(false);
+        buttonLogin.setBackgroundColor(getResources().getColor(R.color.colorLightGray));
 
         String url = API_URL + "/social/convert-token";
 
