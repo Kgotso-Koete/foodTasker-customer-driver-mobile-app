@@ -24,7 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-//import com.example.foodtasker.Utils.CircleTransform;
+import com.example.foodtasker.CircleTransform;
 //import com.example.foodtasker.Fragments.OrderFragment;
 import com.example.foodtasker.R;
 import com.example.foodtasker.RestaurantListFragment;
@@ -38,6 +38,7 @@ import java.util.Objects;
 public class CustomerMainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
+    private SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +89,16 @@ public class CustomerMainActivity extends AppCompatActivity {
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.content_frame, new RestaurantListFragment()).commit();
+
+        // Get the User's info
+        sharedPref = getSharedPreferences("MY_KEY", Context.MODE_PRIVATE);
+
+        View header = navigationView.getHeaderView(0);
+        ImageView customer_avatar = (ImageView) header.findViewById(R.id.customer_avatar);
+        TextView customer_name = (TextView) header.findViewById(R.id.customer_name);
+
+        customer_name.setText(sharedPref.getString("name", ""));
+        Picasso.with(this).load(sharedPref.getString("avatar", "")).transform(new CircleTransform()).into(customer_avatar);
     }
 
     @Override
