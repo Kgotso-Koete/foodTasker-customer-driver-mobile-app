@@ -40,6 +40,10 @@ import java.util.Arrays;
  */
 public class RestaurantListFragment extends Fragment {
 
+    private ArrayList<Restaurant> restaurantArrayList;
+    private RestaurantAdapter adapter;
+    private Restaurant[] restaurants = new Restaurant[]{};
+
     String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
 
 
@@ -58,36 +62,11 @@ public class RestaurantListFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        restaurantArrayList = new ArrayList<Restaurant>();
+        adapter = new RestaurantAdapter(this.getActivity(), restaurantArrayList);
+
         ListView restaurantListView = (ListView) getActivity().findViewById(R.id.restaurant_list);
-        restaurantListView.setAdapter(new BaseAdapter() {
-            @Override
-            public int getCount() {
-                return 3;
-            }
-
-            @Override
-            public Object getItem(int position) {
-                return null;
-            }
-
-            @Override
-            public long getItemId(int position) {
-                return 0;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                return LayoutInflater.from(getActivity()).inflate(R.layout.list_item_restaurant, null);
-            }
-        });
-
-        restaurantListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getContext(),MealListActivity.class);
-                startActivity(intent);
-            }
-        });
+        restaurantListView.setAdapter(adapter);
 
         // Get list of restaurants
         getRestaurants();
@@ -104,6 +83,24 @@ public class RestaurantListFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("RESTAURANTS LIST", response.toString());
+
+                        // Convert JSON data to JSON Array
+                        JSONArray restaurantsJSONArray = null;
+
+                        try {
+                            restaurantsJSONArray = response.getJSONArray("restaurants");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        // Convert Json Array to Restaurant Array
+                        Gson gson = new Gson();
+                        restaurants = gson.fromJson(restaurantsJSONArray.toString(), Restaurant[].class);
+
+                        // Refresh ListView with up-to-date data
+                        restaurantArrayList.clear();
+                        restaurantArrayList.addAll(new ArrayList<Restaurant>(Arrays.asList(restaurants)));
+                        adapter.notifyDataSetChanged();
 
                     }
                 },
