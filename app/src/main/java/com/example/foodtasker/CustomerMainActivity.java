@@ -40,6 +40,10 @@ public class CustomerMainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private SharedPreferences sharedPref;
 
+    String CLIENT_ID = BuildConfig.CLIENT_ID;
+    String CLIENT_SECRET = BuildConfig.CLIENT_SECRET;
+    String API_URL = BuildConfig.API_URL;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +84,11 @@ public class CustomerMainActivity extends AppCompatActivity {
                         } else if (id == R.id.nav_order) {
                             transaction.replace(R.id.content_frame, new OrderFragment()).commit();
                         } else if (id == R.id.nav_logout) {
+                            logoutToServer(sharedPref.getString("token", ""));
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.remove("token");
+                            editor.apply();
+
                             finishAffinity();
                             Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
                             startActivity(intent);
@@ -116,5 +125,38 @@ public class CustomerMainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+    }
+
+    private void logoutToServer(final String token) {
+        String url = API_URL + "/social/revoke-token";
+
+        StringRequest postRequest = new StringRequest
+                (Request.Method.POST, url, new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                        // Execute code
+                        Log.d("RESPONSE FROM SERVER", response.toString());
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("token", token);
+                params.put("client_id", CLIENT_ID);
+                params.put("client_secret", CLIENT_SECRET);
+
+                return params;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(postRequest);
     }
 }
