@@ -1,7 +1,6 @@
 package com.example.foodtasker;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,8 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -23,8 +20,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.foodtasker.R;
-//import com.example.foodtasker.Objects.Restaurant;
-//import com.example.foodtasker.Adapters.RestaurantAdapter;
+import com.example.foodtasker.Restaurant;
+import com.example.foodtasker.RestaurantAdapter;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -46,14 +43,14 @@ public class RestaurantListFragment extends Fragment {
 
     String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
 
-
     public RestaurantListFragment() {
         // Required empty public constructor
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_restaurant_list, container, false);
     }
@@ -70,6 +67,9 @@ public class RestaurantListFragment extends Fragment {
 
         // Get list of restaurants
         getRestaurants();
+
+        // Add the Search function
+        addSearchFunction();
     }
 
     private void getRestaurants() {
@@ -101,7 +101,6 @@ public class RestaurantListFragment extends Fragment {
                         restaurantArrayList.clear();
                         restaurantArrayList.addAll(new ArrayList<Restaurant>(Arrays.asList(restaurants)));
                         adapter.notifyDataSetChanged();
-
                     }
                 },
                 new Response.ErrorListener() {
@@ -116,4 +115,33 @@ public class RestaurantListFragment extends Fragment {
         queue.add(jsonObjectRequest);
     }
 
+    private void addSearchFunction() {
+        EditText searchInput = (EditText) getActivity().findViewById(R.id.res_search);
+
+        searchInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                Log.d("SEARCH", charSequence.toString());
+
+                // Update the Restaurant List
+                restaurantArrayList.clear();
+                for (Restaurant restaurant : restaurants) {
+                    if (restaurant.getName().toLowerCase().contains(charSequence.toString().toLowerCase())) {
+                        restaurantArrayList.add(restaurant);
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+    }
 }
