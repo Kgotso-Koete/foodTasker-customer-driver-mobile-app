@@ -1,4 +1,4 @@
-package com.example.foodtasker;
+package com.example.foodtasker.Activities;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;

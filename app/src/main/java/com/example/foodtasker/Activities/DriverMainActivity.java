@@ -1,4 +1,4 @@
-package com.example.foodtasker;
+package com.example.foodtasker.Activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,11 +24,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.foodtasker.CircleTransform;
+import com.example.foodtasker.BuildConfig;
+import com.example.foodtasker.Utils.CircleTransform;
 //import com.example.foodtasker.Fragments.DeliveryFragment;
 //import com.example.foodtasker.Fragments.OrderListFragment;
+import com.example.foodtasker.Fragments.DeliveryFragment;
+import com.example.foodtasker.Fragments.OrderListFragment;
 import com.example.foodtasker.R;
 //import com.example.foodtasker.Fragments.StatisticFragment;
+import com.example.foodtasker.Fragments.StatisticFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;

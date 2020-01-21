@@ -1,4 +1,4 @@
-package com.example.foodtasker;
+package com.example.foodtasker.Fragments;
 
 
 import android.os.Bundle;
@@ -19,9 +19,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.foodtasker.BuildConfig;
 import com.example.foodtasker.R;
-import com.example.foodtasker.Restaurant;
-import com.example.foodtasker.RestaurantAdapter;
+import com.example.foodtasker.Objects.Restaurant;
+import com.example.foodtasker.Adapters.RestaurantAdapter;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;

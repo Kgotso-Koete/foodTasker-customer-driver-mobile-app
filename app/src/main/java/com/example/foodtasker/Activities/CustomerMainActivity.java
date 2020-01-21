@@ -1,4 +1,4 @@
-package com.example.foodtasker;
+package com.example.foodtasker.Activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,16 +24,18 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.foodtasker.CircleTransform;
+import com.example.foodtasker.BuildConfig;
+import com.example.foodtasker.Utils.CircleTransform;
 //import com.example.foodtasker.Fragments.OrderFragment;
+import com.example.foodtasker.Fragments.OrderFragment;
 import com.example.foodtasker.R;
-import com.example.foodtasker.RestaurantListFragment;
+import com.example.foodtasker.Fragments.RestaurantListFragment;
 //import com.example.foodtasker.Fragments.TrayFragment;
+import com.example.foodtasker.Fragments.TrayFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class CustomerMainActivity extends AppCompatActivity {
 

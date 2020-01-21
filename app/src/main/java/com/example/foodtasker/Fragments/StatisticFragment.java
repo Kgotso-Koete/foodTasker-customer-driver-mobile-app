@@ -1,4 +1,4 @@
-package com.example.foodtasker;
+package com.example.foodtasker.Fragments;
 
 
 import android.content.Context;

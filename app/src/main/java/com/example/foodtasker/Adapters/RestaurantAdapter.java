@@ -1,4 +1,4 @@
-package com.example.foodtasker;
+package com.example.foodtasker.Adapters;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,8 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.foodtasker.MealListActivity;
-import com.example.foodtasker.Restaurant;
+import com.example.foodtasker.Activities.MealListActivity;
+import com.example.foodtasker.Objects.Restaurant;
 import com.example.foodtasker.R;
 import com.squareup.picasso.Picasso;
 

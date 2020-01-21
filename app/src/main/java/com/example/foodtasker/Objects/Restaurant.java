@@ -1,4 +1,4 @@
-package com.example.foodtasker;
+package com.example.foodtasker.Objects;
 
 public class Restaurant {
 

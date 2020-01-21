@@ -1,4 +1,4 @@
-package com.example.foodtasker;
+package com.example.foodtasker.Utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;

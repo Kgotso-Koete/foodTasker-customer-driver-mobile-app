@@ -1,7 +1,9 @@
-package com.example.foodtasker;
+package com.example.foodtasker.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.foodtasker.R;
 
 public class PaymentActivity extends AppCompatActivity {
 
