@@ -48,7 +48,7 @@ public class RestaurantAdapter extends BaseAdapter {
             view = LayoutInflater.from(activity).inflate(R.layout.list_item_restaurant, null);
         }
 
-        Restaurant restaurant = restaurantList.get(i);
+        final Restaurant restaurant = restaurantList.get(i);
 
         TextView resName = (TextView) view.findViewById(R.id.res_name);
         TextView resAddress = (TextView) view.findViewById(R.id.res_address);
@@ -62,6 +62,8 @@ public class RestaurantAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(activity, MealListActivity.class);
+                intent.putExtra("restaurantId", restaurant.getId());
+                intent.putExtra("restaurantName", restaurant.getName());
                 activity.startActivity(intent);
             }
         });
