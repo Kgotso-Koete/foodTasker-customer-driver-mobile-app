@@ -17,8 +17,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-//import com.example.foodtasker.Adapters.MealAdapter;
-//import com.example.foodtasker.Objects.Meal;
+import com.example.foodtasker.Adapters.MealAdapter;
+import com.example.foodtasker.Objects.Meal;
 import com.example.foodtasker.BuildConfig;
 import com.example.foodtasker.R;
 import com.google.gson.Gson;
@@ -31,6 +31,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MealListActivity extends AppCompatActivity {
+
+    private ArrayList<Meal> mealArrayList;
+    private MealAdapter adapter;
 
     String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
 
@@ -45,36 +48,11 @@ public class MealListActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle(restaurantName);
 
+        mealArrayList = new ArrayList<Meal>();
+        adapter = new MealAdapter(this, mealArrayList);
+
         ListView listView = (ListView) findViewById(R.id.meal_list);
-        listView.setAdapter(new BaseAdapter() {
-            @Override
-            public int getCount() {
-                return 3;
-            }
-
-            @Override
-            public Object getItem(int position) {
-                return null;
-            }
-
-            @Override
-            public long getItemId(int position) {
-                return 0;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                return LayoutInflater.from(MealListActivity.this).inflate(R.layout.list_item_meal, null);
-            }
-        });
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MealListActivity.this, MealDetailActivity.class);
-                startActivity(intent);
-            }
-        });
+        listView.setAdapter(adapter);
 
         // Get Meals list
         getMeals(restaurantId);
@@ -91,6 +69,24 @@ public class MealListActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("MEAL LIST", response.toString());
+
+                        // Convert JSON data to JSON Array
+                        JSONArray mealsJSONArray = null;
+
+                        try {
+                            mealsJSONArray = response.getJSONArray("meals");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        // Convert Json Array to Restaurant Array
+                        Gson gson = new Gson();
+                        Meal[] meals = gson.fromJson(mealsJSONArray.toString(), Meal[].class);
+
+                        // Refresh ListView with up-to-date data
+                        mealArrayList.clear();
+                        mealArrayList.addAll(new ArrayList<Meal>(Arrays.asList(meals)));
+                        adapter.notifyDataSetChanged();
 
                     }
                 },

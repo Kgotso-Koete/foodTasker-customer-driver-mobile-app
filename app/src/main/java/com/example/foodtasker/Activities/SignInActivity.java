@@ -1,3 +1,4 @@
+// COMPLETED: ONLY URL API TO BE CHANGED
 package com.example.foodtasker.Activities;
 
 import android.content.Context;
@@ -31,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+
 public class SignInActivity extends AppCompatActivity {
 
     private Button customerButton, driverButton;
@@ -41,7 +43,6 @@ public class SignInActivity extends AppCompatActivity {
     String CLIENT_ID = BuildConfig.CLIENT_ID;
     String CLIENT_SECRET = BuildConfig.CLIENT_SECRET;
     String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -230,6 +231,7 @@ public class SignInActivity extends AppCompatActivity {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
 
                     }
                 });

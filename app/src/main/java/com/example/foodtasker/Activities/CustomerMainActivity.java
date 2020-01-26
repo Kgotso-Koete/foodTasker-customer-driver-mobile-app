@@ -1,3 +1,4 @@
+// COMPLETED: ONLY URL API TO BE CHANGED
 package com.example.foodtasker.Activities;
 
 import android.content.Context;
@@ -26,16 +27,15 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.foodtasker.BuildConfig;
 import com.example.foodtasker.Utils.CircleTransform;
-//import com.example.foodtasker.Fragments.OrderFragment;
 import com.example.foodtasker.Fragments.OrderFragment;
 import com.example.foodtasker.R;
 import com.example.foodtasker.Fragments.RestaurantListFragment;
-//import com.example.foodtasker.Fragments.TrayFragment;
 import com.example.foodtasker.Fragments.TrayFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class CustomerMainActivity extends AppCompatActivity {
 
@@ -53,24 +53,19 @@ public class CustomerMainActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.icon_menu_24dp);
-        // remove title from action bar
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
-
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
 
-                        menuItem.setChecked(true);
                         // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
 
@@ -79,6 +74,7 @@ public class CustomerMainActivity extends AppCompatActivity {
 
                         int id = menuItem.getItemId();
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
                         if (id == R.id.nav_restaurant) {
                             transaction.replace(R.id.content_frame, new RestaurantListFragment()).commit();
                         } else if (id == R.id.nav_tray) {
@@ -94,15 +90,25 @@ public class CustomerMainActivity extends AppCompatActivity {
                             finishAffinity();
                             Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
                             startActivity(intent);
-
                         }
 
                         return true;
                     }
                 });
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.content_frame, new RestaurantListFragment()).commit();
+        Intent intent = getIntent();
+        String screen = intent.getStringExtra("screen");
+
+        if (Objects.equals(screen, "tray")) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.content_frame, new TrayFragment()).commit();
+        } else if (Objects.equals(screen, "order")) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.content_frame, new OrderFragment()).commit();
+        } else {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.content_frame, new RestaurantListFragment()).commit();
+        }
 
         // Get the User's info
         sharedPref = getSharedPreferences("MY_KEY", Context.MODE_PRIVATE);
@@ -127,6 +133,7 @@ public class CustomerMainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+
     }
 
     private void logoutToServer(final String token) {
@@ -144,6 +151,8 @@ public class CustomerMainActivity extends AppCompatActivity {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+
                     }
                 }) {
 
