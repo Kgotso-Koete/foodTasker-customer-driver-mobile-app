@@ -19,10 +19,12 @@ import java.util.ArrayList;
 public class MealAdapter extends BaseAdapter {
     private Activity activity;
     private ArrayList<Meal> mealList;
+    private String restaurantId;
 
-    public MealAdapter(Activity activity, ArrayList<Meal> mealList) {
+    public MealAdapter(Activity activity, ArrayList<Meal> mealList, String restaurantId) {
         this.activity = activity;
         this.mealList = mealList;
+        this.restaurantId = restaurantId;
     }
 
     @Override
@@ -47,7 +49,7 @@ public class MealAdapter extends BaseAdapter {
             view = LayoutInflater.from(activity).inflate(R.layout.list_item_meal, null);
         }
 
-        Meal meal = mealList.get(i);
+        final Meal meal = mealList.get(i);
 
         TextView mealName = (TextView) view.findViewById(R.id.meal_name);
         TextView mealDesc = (TextView) view.findViewById(R.id.meal_desc);
@@ -63,6 +65,12 @@ public class MealAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(activity, MealDetailActivity.class);
+                intent.putExtra("restaurantId", restaurantId);
+                intent.putExtra("mealId", meal.getId());
+                intent.putExtra("mealName", meal.getName());
+                intent.putExtra("mealDescription", meal.getShort_description());
+                intent.putExtra("mealPrice", meal.getPrice());
+                intent.putExtra("mealImage", meal.getImage());
                 activity.startActivity(intent);
             }
         });

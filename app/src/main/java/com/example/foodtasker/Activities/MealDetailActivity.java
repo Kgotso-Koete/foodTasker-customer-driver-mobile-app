@@ -31,7 +31,27 @@ public class MealDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meal_detail);
-        getSupportActionBar().setTitle("Nandos");
+
+        Intent intent = getIntent();
+        String restaurantId = intent.getStringExtra("restaurantId");
+        String mealId = intent.getStringExtra("mealId");
+        String mealName = intent.getStringExtra("mealName");
+        String mealDescription = intent.getStringExtra("mealDescription");
+        Float mealPrice = intent.getFloatExtra("mealPrice", 0);
+        String mealImage = intent.getStringExtra("mealImage");
+
+        getSupportActionBar().setTitle(mealName);
+
+        TextView name = (TextView) findViewById(R.id.meal_name);
+        TextView desc = (TextView) findViewById(R.id.meal_desc);
+        TextView price = (TextView) findViewById(R.id.meal_price);
+        ImageView image = (ImageView) findViewById(R.id.meal_image);
+
+        name.setText(mealName);
+        desc.setText(mealDescription);
+        price.setText("$" + mealPrice);
+        Picasso.with(getApplicationContext()).load(mealImage).fit().into(image);
+
     }
 
     @Override

@@ -11,13 +11,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.foodtasker.BuildConfig;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.foodtasker.BuildConfig;
 import com.example.foodtasker.R;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -43,6 +43,7 @@ public class SignInActivity extends AppCompatActivity {
     String CLIENT_ID = BuildConfig.CLIENT_ID;
     String CLIENT_SECRET = BuildConfig.CLIENT_SECRET;
     String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
