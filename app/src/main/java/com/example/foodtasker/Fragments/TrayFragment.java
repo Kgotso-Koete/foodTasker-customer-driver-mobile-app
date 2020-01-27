@@ -11,18 +11,26 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.os.AsyncTask;
+import android.util.Log;
+import android.annotation.SuppressLint;
+import android.widget.Toast;
 
-//import com.example.foodtasker.Activities.PaymentActivity;
+import com.example.foodtasker.Activities.PaymentActivity;
 //import com.example.foodtasker.Adapters.TrayAdapter;
-//import com.example.foodtasker.AppDatabase;
-//import com.example.foodtasker.Objects.Tray;
+import com.example.foodtasker.AppDatabase;
+import com.example.foodtasker.Objects.Tray;
 import com.example.foodtasker.Activities.PaymentActivity;
 import com.example.foodtasker.R;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class TrayFragment extends Fragment {
+
+    private AppDatabase db;
 
 
     public TrayFragment() {
@@ -40,6 +48,10 @@ public class TrayFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        // Initialise DB
+        db = AppDatabase.getAppDatabase(getContext());
+        listTray();
 
         ListView restaurantListView = (ListView) getActivity().findViewById(R.id.tray_list);
         restaurantListView.setAdapter(new BaseAdapter() {
@@ -74,6 +86,25 @@ public class TrayFragment extends Fragment {
 
             }
         });
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private void listTray() {
+        new AsyncTask<Void, Void, List<Tray>>() {
+            @Override
+            protected List<Tray> doInBackground(Void... voids) {
+                return db.trayDao().getAll();
+            }
+
+            @Override
+            protected void onPostExecute(List<Tray> trays) {
+                super.onPostExecute(trays);
+                for (Tray tray : trays) {
+                    Log.d("TRAY ITEM", tray.getMealName() + "-" + tray.getMealQuantity());
+                }
+            }
+        }.execute();
+
     }
 
 }
