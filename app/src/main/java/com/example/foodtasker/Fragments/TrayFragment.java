@@ -104,6 +104,7 @@ public class TrayFragment extends Fragment {
     @SuppressLint("StaticFieldLeak")
     private void listTray() {
         new AsyncTask<Void, Void, List<Tray>>() {
+
             @Override
             protected List<Tray> doInBackground(Void... voids) {
                 return db.trayDao().getAll();
@@ -117,10 +118,35 @@ public class TrayFragment extends Fragment {
                     trayList.clear();
                     trayList.addAll(trays);
                     adapter.notifyDataSetChanged();
+
+                    // Calculate the total
+                    float total = 0;
+                    for (Tray tray : trays) {
+                        total += tray.getMealQuantity() * tray.getMealPrice();
+                    }
+
+                    TextView totalView = (TextView) getActivity().findViewById(R.id.tray_total);
+                    totalView.setText("$" + total);
+                } else {
+                    // Display a message
+                    TextView alertText = new TextView(getActivity());
+                    alertText.setText("Your tray is empty. Please order a meal");
+                    alertText.setTextSize(17);
+                    alertText.setGravity(Gravity.CENTER);
+                    alertText.setLayoutParams(
+                            new TableLayout.LayoutParams(
+                                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                                    1
+                            ));
+
+                    LinearLayout linearLayout = (LinearLayout) getActivity().findViewById(R.id.tray_layout);
+                    linearLayout.removeAllViews();
+                    linearLayout.addView(alertText);
+
                 }
             }
         }.execute();
-
     }
 
 }
