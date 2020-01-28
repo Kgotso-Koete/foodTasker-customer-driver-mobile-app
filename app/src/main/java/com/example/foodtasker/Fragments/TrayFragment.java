@@ -98,15 +98,8 @@ public class TrayFragment extends Fragment implements OnMapReadyCallback {
         ListView listView = (ListView) getActivity().findViewById(R.id.tray_list);
         listView.setAdapter(adapter);
 
-        // Construct a FusedLocationProviderClient.
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.tray_map);
-        mapFragment.getMapAsync(this);
-        
-
-        Button buttonLogin = (Button) getActivity().findViewById(R.id.button_add_payment);
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
+        Button buttonAddPayment = (Button) getActivity().findViewById(R.id.button_add_payment);
+        buttonAddPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -115,6 +108,18 @@ public class TrayFragment extends Fragment implements OnMapReadyCallback {
 
             }
         });
+
+        // Construct a FusedLocationProviderClient.
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.tray_map);
+        mapFragment.getMapAsync(this);
+
+        // Address EditText
+        address = (EditText) getActivity().findViewById(R.id.tray_address);
+
+        // Handle Map Address
+        handleMapAddress();
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -235,6 +240,20 @@ public class TrayFragment extends Fragment implements OnMapReadyCallback {
                                 mMap.addMarker(new MarkerOptions().position(
                                         new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude())
                                 ));
+
+                                // Set address field from the position on the map
+                                Geocoder coder = new Geocoder(getActivity());
+                                try {
+                                    ArrayList<Address> addresses = (ArrayList<Address>) coder.getFromLocation(
+                                            mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude(), 1
+                                    );
+
+                                    if (!addresses.isEmpty()) {
+                                        address.setText(addresses.get(0).getAddressLine(0));
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     }
@@ -243,6 +262,36 @@ public class TrayFragment extends Fragment implements OnMapReadyCallback {
         } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
+    }
+
+
+    private void handleMapAddress() {
+        address.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+
+                if (i == EditorInfo.IME_ACTION_DONE) {
+                    Geocoder coder = new Geocoder(getActivity());
+
+                    try {
+                        ArrayList<Address> addresses = (ArrayList<Address>) coder.getFromLocationName(textView.getText().toString(), 1);
+                        if (!addresses.isEmpty()) {
+                            double lat = addresses.get(0).getLatitude();
+                            double lng = addresses.get(0).getLongitude();
+
+                            LatLng pos = new LatLng(lat, lng);
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, DEFAULT_ZOOM));
+                            mMap.clear();
+                            mMap.addMarker(new MarkerOptions().position(pos));
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                return false;
+            }
+        });
     }
 
 }
