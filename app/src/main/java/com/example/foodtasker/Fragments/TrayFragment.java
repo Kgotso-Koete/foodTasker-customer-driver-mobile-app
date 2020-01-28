@@ -1,3 +1,4 @@
+// COMPLETED
 package com.example.foodtasker.Fragments;
 
 
@@ -52,6 +53,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -70,7 +72,6 @@ public class TrayFragment extends Fragment implements OnMapReadyCallback {
     private static final int DEFAULT_ZOOM = 15;
 
     private EditText address;
-
 
     public TrayFragment() {
         // Required empty public constructor
@@ -98,17 +99,6 @@ public class TrayFragment extends Fragment implements OnMapReadyCallback {
         ListView listView = (ListView) getActivity().findViewById(R.id.tray_list);
         listView.setAdapter(adapter);
 
-        Button buttonAddPayment = (Button) getActivity().findViewById(R.id.button_add_payment);
-        buttonAddPayment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(getContext(), PaymentActivity.class);
-                startActivity(intent);
-
-            }
-        });
-
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
@@ -120,6 +110,9 @@ public class TrayFragment extends Fragment implements OnMapReadyCallback {
 
         // Handle Map Address
         handleMapAddress();
+
+        // Handle Add Payment Button Click event
+        handleAddPayment();
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -171,35 +164,6 @@ public class TrayFragment extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
-    public void onMapReady(GoogleMap map) {
-        mMap = map;
-
-        // Do other setup activities here too, as described elsewhere in this tutorial.
-        getLocationPermission();
-
-        // Get the last-know location of the device and set the position of the map.
-        getDeviceLocation();
-    }
-
-
-    private void getLocationPermission() {
-        /*
-         * Request location permission, so that we can get the location of the
-         * device. The result of the permission request is handled by a callback,
-         * onRequestPermissionsResult.
-         */
-        if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            mLocationPermissionGranted = true;
-        } else {
-            TrayFragment.this.requestPermissions(
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-        }
-    }
-
-    @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[],
                                            @NonNull int[] grantResults) {
@@ -215,6 +179,34 @@ public class TrayFragment extends Fragment implements OnMapReadyCallback {
                     getDeviceLocation();
                 }
             }
+        }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+        mMap = map;
+
+        // Do other setup activities here too, as described elsewhere in this tutorial.
+        getLocationPermission();
+
+        // Get the last-know location of the device and set the position of the map.
+        getDeviceLocation();
+    }
+
+    private void getLocationPermission() {
+        /*
+         * Request location permission, so that we can get the location of the
+         * device. The result of the permission request is handled by a callback,
+         * onRequestPermissionsResult.
+         */
+        if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mLocationPermissionGranted = true;
+        } else {
+            TrayFragment.this.requestPermissions(
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
     }
 
@@ -264,7 +256,6 @@ public class TrayFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-
     private void handleMapAddress() {
         address.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
@@ -294,4 +285,30 @@ public class TrayFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
+    private void handleAddPayment() {
+        Button buttonAddPayment = (Button) getActivity().findViewById(R.id.button_add_payment);
+        buttonAddPayment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (address.getText().toString().equals("")) {
+                    address.setError("Address cannot be blank");
+                } else {
+                    Intent intent = new Intent(getContext(), PaymentActivity.class);
+                    intent.putExtra("restaurantId", trayList.get(0).getRestaurantId());
+                    intent.putExtra("address", address.getText().toString());
+
+                    ArrayList<HashMap<String, Integer>> orderDetails = new ArrayList<HashMap<String, Integer>>();
+                    for (Tray tray : trayList) {
+                        HashMap<String, Integer> map = new HashMap<String, Integer>();
+                        map.put("meal_id", Integer.parseInt(tray.getMealId()));
+                        map.put("quantity", tray.getMealQuantity());
+                        orderDetails.add(map);
+                    }
+                    intent.putExtra("orderDetails", new Gson().toJson(orderDetails));
+
+                    startActivity(intent);
+                }
+            }
+        });
+    }
 }
