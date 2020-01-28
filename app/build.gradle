@@ -61,7 +61,7 @@ android {
     defaultConfig {
 
         // should correspond to key/value pairs inside the file
-        buildConfigField("String", "GOOGLE_MAPS_API_KEY", apikeyProperties['GOOGLE_MAPS_API_KEY'])
+        resValue("string", "GOOGLE_MAPS_API_KEY", apikeyProperties['GOOGLE_MAPS_API_KEY'])
         buildConfigField("String", "CLIENT_ID", apikeyProperties['CLIENT_ID'])
         buildConfigField("String", "CLIENT_SECRET", apikeyProperties['CLIENT_SECRET'])
         buildConfigField("String", "LOCAL_API_URL", apikeyProperties['LOCAL_API_URL'])
