@@ -35,6 +35,7 @@ public class MealListActivity extends AppCompatActivity {
     private ArrayList<Meal> mealArrayList;
     private MealAdapter adapter;
 
+    // TODO: Change API
     String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
 
     @Override

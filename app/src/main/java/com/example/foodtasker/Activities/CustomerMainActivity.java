@@ -44,6 +44,7 @@ public class CustomerMainActivity extends AppCompatActivity {
 
     String CLIENT_ID = BuildConfig.CLIENT_ID;
     String CLIENT_SECRET = BuildConfig.CLIENT_SECRET;
+    // TODO: Change API
     String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
 
     @Override

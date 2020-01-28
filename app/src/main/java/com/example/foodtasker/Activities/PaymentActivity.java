@@ -1,3 +1,4 @@
+// COMPLETED: ONLY URL API TO BE CHANGED
 package com.example.foodtasker.Activities;
 
 import android.annotation.SuppressLint;
@@ -27,6 +28,7 @@ import com.stripe.android.TokenCallback;
 import com.stripe.android.model.Card;
 import com.stripe.android.model.Token;
 import com.stripe.android.view.CardInputWidget;
+import com.example.foodtasker.BuildConfig;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,17 +36,13 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.example.foodtasker.BuildConfig;
-
 public class PaymentActivity extends AppCompatActivity {
 
     private String restaurantId, address, orderDetails;
     private Button buttonPlaceOrder;
 
-    private String STRIPE_API_KEY = BuildConfig.STRIPE_API_KEY;
-
-    String CLIENT_ID = BuildConfig.CLIENT_ID;
-    String CLIENT_SECRET = BuildConfig.CLIENT_SECRET;
+    String STRIPE_API_KEY = BuildConfig.STRIPE_API_KEY;
+    // TODO: Change API
     String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
 
     @Override
@@ -65,15 +63,15 @@ public class PaymentActivity extends AppCompatActivity {
         buttonPlaceOrder.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("StaticFieldLeak")
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 final Card card = mCardInputWidget.getCard();
                 if (card == null) {
                     // Do not continue token creation.
                     Toast.makeText(getApplicationContext(), "Card cannot be blank", Toast.LENGTH_LONG).show();
                 } else {
+
                     // Disable the Place Order Button
                     setButtonPlaceOrder("LOADING...", false);
-
 
                     new AsyncTask<Void, Void, Void>() {
                         @Override
@@ -125,6 +123,7 @@ public class PaymentActivity extends AppCompatActivity {
 
                             if (jsonObject.getString("status").equals("success")) {
                                 deleteTray();
+
                                 // Jump to the Order screen
                                 Intent intent = new Intent(getApplicationContext(), CustomerMainActivity.class);
                                 intent.putExtra("screen", "order");
@@ -151,6 +150,9 @@ public class PaymentActivity extends AppCompatActivity {
                         // Enable the Place Order Button
                         setButtonPlaceOrder("PLACE ORDER", true);
 
+                        Toast.makeText(getApplicationContext(),
+                                error.toString(),
+                                Toast.LENGTH_SHORT).show();
                     }
                 }) {
 
@@ -175,10 +177,8 @@ public class PaymentActivity extends AppCompatActivity {
                         DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
         );
 
-
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(postRequest);
-
     }
 
     private void setButtonPlaceOrder(String text, boolean isEnable) {
