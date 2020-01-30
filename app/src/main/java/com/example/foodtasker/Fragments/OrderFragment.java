@@ -29,9 +29,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-//import com.example.foodtasker.Adapters.TrayAdapter;
-//import com.example.foodtasker.Objects.Restaurant;
-//import com.example.foodtasker.Objects.Tray;
+import com.example.foodtasker.Adapters.TrayAdapter;
+import com.example.foodtasker.Objects.Restaurant;
+import com.example.foodtasker.Objects.Tray;
 import com.example.foodtasker.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -55,10 +55,19 @@ import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.example.foodtasker.BuildConfig;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class OrderFragment extends Fragment {
+
+    private ArrayList<Tray> trayList;
+    private TrayAdapter adapter;
+    private Button statusView;
+
+    // TODO: Change API
+    String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
 
 
     public OrderFragment() {
@@ -77,28 +86,93 @@ public class OrderFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ListView restaurantListView = (ListView) getActivity().findViewById(R.id.tray_list);
-        restaurantListView.setAdapter(new BaseAdapter() {
-            @Override
-            public int getCount() {
-                return 4;
-            }
+        trayList = new ArrayList<Tray>();
+        adapter = new TrayAdapter(this.getActivity(), trayList);
 
-            @Override
-            public Object getItem(int position) {
-                return null;
-            }
+        ListView listView = (ListView) getActivity().findViewById(R.id.tray_list);
+        listView.setAdapter(adapter);
 
-            @Override
-            public long getItemId(int position) {
-                return 0;
-            }
+        statusView = (Button) getActivity().findViewById(R.id.status);
 
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                return LayoutInflater.from(getActivity()).inflate(R.layout.list_item_tray, null);
-            }
-        });
+        // Get The Latest Order Data
+        getLatestOrder();
+    }
+
+    private void getLatestOrder() {
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("MY_KEY", Context.MODE_PRIVATE);
+        String url = LOCAL_API_URL + "/customer/order/latest/?access_token=" + sharedPref.getString("token", "");
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("LATEST ORDER", response.toString());
+                        String status = "";
+
+                        // Get Order details in JSONArray type
+                        JSONArray orderDetailsArray = null;
+
+                        try {
+                            orderDetailsArray = response.getJSONObject("order").getJSONArray("order_details");
+                            status = response.getJSONObject("order").getString("status");
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        // Check if the current user have no order, then show a message
+                        if (orderDetailsArray == null || orderDetailsArray.length() == 0) {
+                            TextView alertText = new TextView(getActivity());
+                            alertText.setText("You have no order");
+                            alertText.setTextSize(17);
+                            alertText.setGravity(Gravity.CENTER);
+                            alertText.setLayoutParams(
+                                    new TableLayout.LayoutParams(
+                                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                                            1
+                                    ));
+
+                            LinearLayout linearLayout = (LinearLayout) getActivity().findViewById(R.id.order_layout);
+                            linearLayout.removeAllViews();
+                            linearLayout.addView(alertText);
+                        }
+
+                        // Add this to the ListView. Convert JSON object to Tray object
+                        for (int i = 0; i < orderDetailsArray.length(); i++) {
+                            Tray tray = new Tray();
+                            try {
+                                JSONObject orderDetail = orderDetailsArray.getJSONObject(i);
+                                tray.setMealName(orderDetail.getJSONObject("meal").getString("name"));
+                                tray.setMealPrice(orderDetail.getJSONObject("meal").getInt("price"));
+                                tray.setMealQuantity(orderDetail.getInt("quantity"));
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            trayList.add(tray);
+                        }
+
+                        // Update the ListView with Order Details data
+                        adapter.notifyDataSetChanged();
+
+                        // Update Status View
+                        statusView.setText(status);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        );
+
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        queue.add(jsonObjectRequest);
     }
 
 }
