@@ -21,8 +21,8 @@ import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
-//import com.ahmadrosid.lib.drawroutemap.DrawMarker;
-//import com.ahmadrosid.lib.drawroutemap.DrawRouteMaps;
+import com.ahmadrosid.lib.drawroutemap.DrawMarker;
+import com.ahmadrosid.lib.drawroutemap.DrawRouteMaps;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -60,7 +60,7 @@ import com.example.foodtasker.BuildConfig;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class OrderFragment extends Fragment {
+public class OrderFragment extends Fragment implements OnMapReadyCallback {
 
     private ArrayList<Tray> trayList;
     private TrayAdapter adapter;
@@ -68,6 +68,8 @@ public class OrderFragment extends Fragment {
 
     // TODO: Change API
     String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
+
+    private GoogleMap mMap;
 
 
     public OrderFragment() {
@@ -96,6 +98,10 @@ public class OrderFragment extends Fragment {
 
         // Get The Latest Order Data
         getLatestOrder();
+
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.order_map);
+        mapFragment.getMapAsync(this);
     }
 
     private void getLatestOrder() {
@@ -161,6 +167,9 @@ public class OrderFragment extends Fragment {
 
                         // Update Status View
                         statusView.setText(status);
+
+                        // Show Restaurant and Customer on the map
+                        drawRouteOnMap(response);
                     }
                 },
                 new Response.ErrorListener() {
@@ -173,6 +182,43 @@ public class OrderFragment extends Fragment {
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         queue.add(jsonObjectRequest);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+    }
+
+    private void drawRouteOnMap(JSONObject response) {
+
+        try {
+            String restaurantAddress = response.getJSONObject("order").getJSONObject("restaurant").getString("address");
+            String orderAddress = response.getJSONObject("order").getString("address");
+
+            Geocoder coder = new Geocoder(getActivity());
+            ArrayList<Address> resAddresses = (ArrayList<Address>) coder.getFromLocationName(restaurantAddress, 1);
+            ArrayList<Address> ordAddresses = (ArrayList<Address>) coder.getFromLocationName(orderAddress, 1);
+
+            if (!resAddresses.isEmpty() && !ordAddresses.isEmpty()) {
+                LatLng restaurantPos = new LatLng(resAddresses.get(0).getLatitude(), resAddresses.get(0).getLongitude());
+                LatLng orderPos = new LatLng(ordAddresses.get(0).getLatitude(), ordAddresses.get(0).getLongitude());
+
+                DrawRouteMaps.getInstance(getActivity(), getResources().getString(R.string.GOOGLE_MAPS_API_KEY)).draw(restaurantPos, orderPos, mMap);
+                DrawMarker.getInstance(getActivity()).draw(mMap, restaurantPos, R.drawable.pin_restaurant, "Restaurant Location");
+                DrawMarker.getInstance(getActivity()).draw(mMap, orderPos, R.drawable.pin_customer, "Customer Location");
+
+                LatLngBounds bounds = new LatLngBounds.Builder()
+                        .include(restaurantPos)
+                        .include(orderPos).build();
+                Point displaySize = new Point();
+                getActivity().getWindowManager().getDefaultDisplay().getSize(displaySize);
+                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, displaySize.x, 250, 30));
+            }
+
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
