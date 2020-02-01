@@ -1,3 +1,4 @@
+// COMPLETED: ONLY URL API TO BE CHANGED
 package com.example.foodtasker.Adapters;
 
 import android.app.Activity;
@@ -39,10 +40,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.example.foodtasker.BuildConfig;
+
+
 public class OrderAdapter extends BaseAdapter {
 
     private Activity activity;
     private ArrayList<Order> orderList;
+
+    // TODO: Change API
+    String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
 
     public OrderAdapter(Activity activity, ArrayList<Order> orderList) {
         this.activity = activity;
@@ -86,12 +93,80 @@ public class OrderAdapter extends BaseAdapter {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Show an alert
+                AlertDialog.Builder builder = new AlertDialog.Builder((activity));
+                builder.setTitle("Pick this order?");
+                builder.setMessage("Would you like to take this order?");
+                builder.setPositiveButton("Cancel", null);
+                builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(activity.getApplicationContext(), "ORDER PICKED", Toast.LENGTH_SHORT).show();
 
+                        pickOrder(order.getId());
+                    }
+                });
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
             }
         });
 
         return view;
     }
 
+    private void pickOrder(final String orderId) {
+        String url = LOCAL_API_URL + "/driver/order/pick/";
 
+        StringRequest postRequest = new StringRequest
+                (Request.Method.POST, url, new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                        // Execute code
+                        Log.d("ORDER PICKED", response.toString());
+
+                        try {
+                            JSONObject jsonObj = new JSONObject(response);
+                            if (jsonObj.getString("status").equals("success")) {
+                                FragmentTransaction transaction = ((DriverMainActivity) activity).getSupportFragmentManager().beginTransaction();
+                                transaction.replace(R.id.content_frame, new DeliveryFragment()).commit();
+                            } else {
+                                Toast.makeText(activity, jsonObj.getString("error"), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+                        Toast.makeText(activity, error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                final SharedPreferences sharedPref = activity.getSharedPreferences("MY_KEY", Context.MODE_PRIVATE);
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("access_token", sharedPref.getString("token", ""));
+                params.put("order_id", orderId);
+
+                return params;
+            }
+        };
+
+        postRequest.setRetryPolicy(
+                new DefaultRetryPolicy(
+                        0,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        );
+
+        RequestQueue queue = Volley.newRequestQueue(activity);
+        queue.add(postRequest);
+    }
 }
