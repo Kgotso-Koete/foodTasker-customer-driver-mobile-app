@@ -79,7 +79,7 @@ import com.example.foodtasker.BuildConfig;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DeliveryFragment extends Fragment {
+public class DeliveryFragment extends Fragment implements OnMapReadyCallback {
 
     private TextView customerName;
     private TextView customerAddress;
@@ -112,6 +112,10 @@ public class DeliveryFragment extends Fragment {
         customerName = (TextView) getActivity().findViewById(R.id.customer_name);
         customerAddress = (TextView) getActivity().findViewById(R.id.customer_address);
         customerImage = (ImageView) getActivity().findViewById(R.id.customer_image);
+
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.delivery_map);
+        mapFragment.getMapAsync(this);
 
         // Get the latest order details
         getLatestOrder();
@@ -173,7 +177,7 @@ public class DeliveryFragment extends Fragment {
                         }
 
                         // Draw route between locations
-                        //drawRouteOnMap(response);
+                        drawRouteOnMap(response);
                     }
                 },
                 new Response.ErrorListener() {
@@ -186,6 +190,51 @@ public class DeliveryFragment extends Fragment {
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         queue.add(jsonObjectRequest);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Promt the user for permission
+        //getLocationPermission();
+
+        // Get the device's location and set the position of the map
+        //getDeviceLocation();
+
+        // Listen location update
+        //startLocationUpdates();
+    }
+
+    private void drawRouteOnMap(JSONObject response) {
+
+        try {
+            String restaurantAddress = response.getJSONObject("order").getJSONObject("restaurant").getString("address");
+            String orderAddress = response.getJSONObject("order").getString("address");
+
+            Geocoder coder = new Geocoder(getActivity());
+            ArrayList<Address> resAddresses = (ArrayList<Address>) coder.getFromLocationName(restaurantAddress, 1);
+            ArrayList<Address> ordAddresses = (ArrayList<Address>) coder.getFromLocationName(orderAddress, 1);
+
+            if (!resAddresses.isEmpty() && !ordAddresses.isEmpty()) {
+                LatLng restaurantPos = new LatLng(resAddresses.get(0).getLatitude(), resAddresses.get(0).getLongitude());
+                LatLng orderPos = new LatLng(ordAddresses.get(0).getLatitude(), ordAddresses.get(0).getLongitude());
+
+                DrawRouteMaps.getInstance(getActivity(), getResources().getString(R.string.GOOGLE_MAPS_API_KEY)).draw(restaurantPos, orderPos, mMap);
+                DrawMarker.getInstance(getActivity()).draw(mMap, restaurantPos, R.drawable.pin_restaurant, "Restaurant Location");
+                DrawMarker.getInstance(getActivity()).draw(mMap, orderPos, R.drawable.pin_customer, "Customer Location");
+
+                LatLngBounds bounds = new LatLngBounds.Builder()
+                        .include(restaurantPos)
+                        .include(orderPos).build();
+                Point displaySize = new Point();
+                getActivity().getWindowManager().getDefaultDisplay().getSize(displaySize);
+                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, displaySize.x, 250, 30));
+            }
+
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
