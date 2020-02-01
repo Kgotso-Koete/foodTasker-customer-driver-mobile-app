@@ -30,8 +30,8 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-//import com.ahmadrosid.lib.drawroutemap.DrawMarker;
-//import com.ahmadrosid.lib.drawroutemap.DrawRouteMaps;
+import com.ahmadrosid.lib.drawroutemap.DrawMarker;
+import com.ahmadrosid.lib.drawroutemap.DrawRouteMaps;
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -41,10 +41,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-//import com.example.foodtasker.Activities.CustomerMainActivity;
-//import com.example.foodtasker.Objects.Tray;
+import com.example.foodtasker.Activities.CustomerMainActivity;
+import com.example.foodtasker.Objects.Tray;
 import com.example.foodtasker.R;
-//import com.example.foodtasker.Utils.CircleTransform;
+import com.example.foodtasker.Utils.CircleTransform;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -72,11 +72,25 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.example.foodtasker.BuildConfig;
+
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class DeliveryFragment extends Fragment {
+
+    private TextView customerName;
+    private TextView customerAddress;
+    private ImageView customerImage;
+
+    private GoogleMap mMap;
+
+    private String orderId;
+
+    // TODO: Change API
+    String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
 
 
     public DeliveryFragment() {
@@ -90,5 +104,89 @@ public class DeliveryFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_delivery, container, false);
     }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        customerName = (TextView) getActivity().findViewById(R.id.customer_name);
+        customerAddress = (TextView) getActivity().findViewById(R.id.customer_address);
+        customerImage = (ImageView) getActivity().findViewById(R.id.customer_image);
+
+        // Get the latest order details
+        getLatestOrder();
+    }
+
+    private void getLatestOrder() {
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("MY_KEY", Context.MODE_PRIVATE);
+        String url = LOCAL_API_URL + "/driver/order/latest/?access_token=" + sharedPref.getString("token", "");
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("GET LATEST ORDER", response.toString());
+
+                        // Get Order details in JSONArray type
+                        JSONObject latestOrderJSONObject = null;
+                        orderId = null;
+                        Boolean orderIsDelivered = null;
+
+                        try {
+                            latestOrderJSONObject = response.getJSONObject("order");
+
+                            orderId = latestOrderJSONObject.getString("id");
+                            orderIsDelivered = latestOrderJSONObject.getString("status").equals("Delivered");
+
+                            customerName.setText(latestOrderJSONObject.getJSONObject("customer").getString("name"));
+                            customerAddress.setText(latestOrderJSONObject.getString("address"));
+                            Picasso.with(getActivity())
+                                    .load(latestOrderJSONObject.getJSONObject("customer").getString("avatar"))
+                                    .transform(new CircleTransform())
+                                    .into(customerImage);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        // Check if there are no outstanding order then display the message.
+                        if (latestOrderJSONObject == null || orderId == null || orderIsDelivered) {
+                            TextView alertText = new TextView(getActivity());
+                            alertText.setText("You have no outstanding order.");
+                            alertText.setTextSize(17);
+                            alertText.setId(alertText.generateViewId());
+
+                            ConstraintLayout constraintLayout = (ConstraintLayout) getActivity().findViewById(R.id.delivery_layout);
+                            constraintLayout.removeAllViews();
+                            constraintLayout.addView(alertText);
+
+                            ConstraintSet set = new ConstraintSet();
+                            set.clone(constraintLayout);
+                            set.connect(alertText.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
+                            set.connect(alertText.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP);
+                            set.connect(alertText.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT);
+                            set.connect(alertText.getId(), ConstraintSet.RIGHT, constraintLayout.getId(), ConstraintSet.RIGHT);
+                            set.applyTo(constraintLayout);
+                        }
+
+                        // Draw route between locations
+                        //drawRouteOnMap(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        );
+
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        queue.add(jsonObjectRequest);
+    }
+
 
 }
