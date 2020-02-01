@@ -1,3 +1,4 @@
+// ALL UPDATES COMPLETED
 package com.example.foodtasker.Fragments;
 
 
@@ -12,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.BaseAdapter;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -20,7 +20,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.foodtasker.BuildConfig;
 import com.example.foodtasker.R;
 import com.example.foodtasker.Objects.Restaurant;
 import com.example.foodtasker.Adapters.RestaurantAdapter;
@@ -42,8 +41,6 @@ public class RestaurantListFragment extends Fragment {
     private ArrayList<Restaurant> restaurantArrayList;
     private RestaurantAdapter adapter;
     private Restaurant[] restaurants = new Restaurant[]{};
-
-    String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
 
     public RestaurantListFragment() {
         // Required empty public constructor
@@ -75,7 +72,7 @@ public class RestaurantListFragment extends Fragment {
     }
 
     private void getRestaurants() {
-        String url = LOCAL_API_URL + "/customer/restaurants/";
+        String url = getString(R.string.API_URL) + "/customer/restaurants/";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,

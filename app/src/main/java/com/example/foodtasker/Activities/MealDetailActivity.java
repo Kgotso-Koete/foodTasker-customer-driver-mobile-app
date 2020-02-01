@@ -1,3 +1,4 @@
+// ALL UPDATES COMPLETED
 package com.example.foodtasker.Activities;
 
 import android.annotation.SuppressLint;

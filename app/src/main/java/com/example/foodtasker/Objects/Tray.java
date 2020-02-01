@@ -1,3 +1,4 @@
+// ALL UPDATES COMPLETED
 package com.example.foodtasker.Objects;
 
 import android.arch.persistence.room.ColumnInfo;

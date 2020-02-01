@@ -1,4 +1,4 @@
-// COMPLETED: ONLY URL API TO BE CHANGED
+// ALL UPDATES COMPLETED
 package com.example.foodtasker.Activities;
 
 import android.content.Context;
@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.foodtasker.BuildConfig;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -33,6 +32,8 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
+import com.example.foodtasker.BuildConfig;
+
 public class SignInActivity extends AppCompatActivity {
 
     private Button customerButton, driverButton;
@@ -42,8 +43,6 @@ public class SignInActivity extends AppCompatActivity {
 
     String CLIENT_ID = BuildConfig.CLIENT_ID;
     String CLIENT_SECRET = BuildConfig.CLIENT_SECRET;
-    String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,7 +186,7 @@ public class SignInActivity extends AppCompatActivity {
         buttonLogin.setClickable(false);
         buttonLogin.setBackgroundColor(getResources().getColor(R.color.colorLightGray));
 
-        String url = LOCAL_API_URL + "/social/convert-token";
+        String url = getString(R.string.API_URL) + "/social/convert-token";
 
         JSONObject jsonBody = new JSONObject();
         try {

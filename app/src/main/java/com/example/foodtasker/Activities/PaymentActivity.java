@@ -1,4 +1,4 @@
-// COMPLETED: ONLY URL API TO BE CHANGED
+// ALL UPDATES COMPLETED
 package com.example.foodtasker.Activities;
 
 import android.annotation.SuppressLint;
@@ -28,7 +28,6 @@ import com.stripe.android.TokenCallback;
 import com.stripe.android.model.Card;
 import com.stripe.android.model.Token;
 import com.stripe.android.view.CardInputWidget;
-import com.example.foodtasker.BuildConfig;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,14 +35,14 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.example.foodtasker.BuildConfig;
+
 public class PaymentActivity extends AppCompatActivity {
 
     private String restaurantId, address, orderDetails;
     private Button buttonPlaceOrder;
 
     String STRIPE_API_KEY = BuildConfig.STRIPE_API_KEY;
-    // TODO: Change API
-    String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +84,6 @@ public class PaymentActivity extends AppCompatActivity {
                                             // Make an order
                                             addOrder(token.getId());
                                         }
-
                                         public void onError(Exception error) {
                                             // Show localized error message
                                             Toast.makeText(getApplicationContext(),
@@ -108,7 +106,7 @@ public class PaymentActivity extends AppCompatActivity {
     }
 
     private void addOrder(final String stripeToken) {
-        String url = LOCAL_API_URL + "/customer/order/add/";
+        String url = getString(R.string.API_URL) + "/customer/order/add/";
 
         StringRequest postRequest = new StringRequest
                 (Request.Method.POST, url, new Response.Listener<String>() {
@@ -146,7 +144,6 @@ public class PaymentActivity extends AppCompatActivity {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // TODO: Handle error
                         // Enable the Place Order Button
                         setButtonPlaceOrder("PLACE ORDER", true);
 

@@ -1,6 +1,6 @@
-// COMPLETED: ONLY URL API TO BE CHANGED
-
+// ALL UPDATES COMPLETED
 package com.example.foodtasker.Fragments;
+
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -74,8 +74,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.example.foodtasker.BuildConfig;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -96,9 +94,6 @@ public class DeliveryFragment extends Fragment implements OnMapReadyCallback {
 
     private LocationCallback mLocationCallback;
     private String orderId;
-
-    // TODO: Change API
-    String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
 
     public DeliveryFragment() {
         // Required empty public constructor
@@ -136,7 +131,7 @@ public class DeliveryFragment extends Fragment implements OnMapReadyCallback {
 
     private void getLatestOrder() {
         SharedPreferences sharedPref = getActivity().getSharedPreferences("MY_KEY", Context.MODE_PRIVATE);
-        String url = LOCAL_API_URL + "/driver/order/latest/?access_token=" + sharedPref.getString("token", "");
+        String url = getString(R.string.API_URL) + "/driver/order/latest/?access_token=" + sharedPref.getString("token", "");
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
@@ -386,7 +381,7 @@ public class DeliveryFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void updateDriverLocation(final String location) {
-        String url = LOCAL_API_URL + "/driver/location/update/";
+        String url = getString(R.string.API_URL) + "/driver/location/update/";
 
         StringRequest postRequest = new StringRequest
                 (Request.Method.POST, url, new Response.Listener<String>() {
@@ -455,7 +450,7 @@ public class DeliveryFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void completeOrder(final String orderId) {
-        String url = LOCAL_API_URL + "/driver/order/complete/";
+        String url = getString(R.string.API_URL) + "/driver/order/complete/";
 
         StringRequest postRequest = new StringRequest
                 (Request.Method.POST, url, new Response.Listener<String>() {
@@ -473,7 +468,6 @@ public class DeliveryFragment extends Fragment implements OnMapReadyCallback {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // TODO: Handle error
                         // Enable the Place Order Button
                         Log.d("ERROR MESSAGE", error.toString());
 

@@ -1,5 +1,6 @@
-// COMPLETED: ONLY URL API TO BE CHANGED
+// ALL UPDATES COMPLETED
 package com.example.foodtasker.Adapters;
+
 
 import android.app.Activity;
 import android.content.Context;
@@ -40,16 +41,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.example.foodtasker.BuildConfig;
-
-
 public class OrderAdapter extends BaseAdapter {
 
     private Activity activity;
     private ArrayList<Order> orderList;
-
-    // TODO: Change API
-    String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
 
     public OrderAdapter(Activity activity, ArrayList<Order> orderList) {
         this.activity = activity;
@@ -116,7 +111,7 @@ public class OrderAdapter extends BaseAdapter {
     }
 
     private void pickOrder(final String orderId) {
-        String url = LOCAL_API_URL + "/driver/order/pick/";
+        String url = activity.getString(R.string.API_URL) + "/driver/order/pick/";
 
         StringRequest postRequest = new StringRequest
                 (Request.Method.POST, url, new Response.Listener<String>() {

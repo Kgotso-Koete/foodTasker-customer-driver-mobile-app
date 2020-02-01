@@ -1,3 +1,4 @@
+// ALL UPDATES COMPLETED
 package com.example.foodtasker.Activities;
 
 import android.content.Context;
@@ -24,29 +25,25 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.foodtasker.BuildConfig;
 import com.example.foodtasker.Utils.CircleTransform;
-//import com.example.foodtasker.Fragments.DeliveryFragment;
-//import com.example.foodtasker.Fragments.OrderListFragment;
 import com.example.foodtasker.Fragments.DeliveryFragment;
 import com.example.foodtasker.Fragments.OrderListFragment;
 import com.example.foodtasker.R;
-//import com.example.foodtasker.Fragments.StatisticFragment;
 import com.example.foodtasker.Fragments.StatisticFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import com.example.foodtasker.BuildConfig;
+
 public class DriverMainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private SharedPreferences sharedPref;
 
-    String CLIENT_ID = BuildConfig.CLIENT_ID;
-    String CLIENT_SECRET = BuildConfig.CLIENT_SECRET;
-    // TODO: Change API
-    String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
+    public String CLIENT_ID = BuildConfig.CLIENT_ID;
+    public String CLIENT_SECRET = BuildConfig.CLIENT_SECRET;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,24 +52,19 @@ public class DriverMainActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.icon_menu_24dp);
-        // remove title from action bar
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
 
         mDrawerLayout = findViewById(R.id.drawer_layout_driver);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
-
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
 
-                        menuItem.setChecked(true);
                         // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
 
@@ -81,6 +73,7 @@ public class DriverMainActivity extends AppCompatActivity {
 
                         int id = menuItem.getItemId();
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
                         if (id == R.id.nav_orders) {
                             transaction.replace(R.id.content_frame, new OrderListFragment()).commit();
                         } else if (id == R.id.nav_delivery) {
@@ -96,7 +89,6 @@ public class DriverMainActivity extends AppCompatActivity {
                             finishAffinity();
                             Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
                             startActivity(intent);
-
                         }
 
                         return true;
@@ -129,10 +121,11 @@ public class DriverMainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+
     }
 
     private void logoutToServer(final String token) {
-        String url = LOCAL_API_URL + "/social/revoke-token";
+        String url = getString(R.string.API_URL) + "/social/revoke-token";
 
         StringRequest postRequest = new StringRequest
                 (Request.Method.POST, url, new Response.Listener<String>() {
@@ -146,6 +139,8 @@ public class DriverMainActivity extends AppCompatActivity {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+
                     }
                 }) {
 

@@ -1,4 +1,4 @@
-// COMPLETED: ONLY URL API TO BE CHANGED
+// ALL UPDATES COMPLETED
 package com.example.foodtasker.Fragments;
 
 
@@ -39,8 +39,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.foodtasker.BuildConfig;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,9 +46,6 @@ import com.example.foodtasker.BuildConfig;
 public class StatisticFragment extends Fragment {
 
     private BarChart chart;
-
-    // TODO: Change API
-    String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
 
     public StatisticFragment() {
         // Required empty public constructor
@@ -131,7 +126,7 @@ public class StatisticFragment extends Fragment {
 
     private void getDriverRevenue() {
         SharedPreferences sharedPref = getActivity().getSharedPreferences("MY_KEY", Context.MODE_PRIVATE);
-        String url = LOCAL_API_URL + "/driver/revenue/?access_token=" + sharedPref.getString("token", "");
+        String url = getString(R.string.API_URL) + "/driver/revenue/?access_token=" + sharedPref.getString("token", "");
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,

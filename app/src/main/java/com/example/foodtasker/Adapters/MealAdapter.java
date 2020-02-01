@@ -1,4 +1,6 @@
+// ALL UPDATES COMPLETED
 package com.example.foodtasker.Adapters;
+
 
 import android.app.Activity;
 import android.content.Intent;

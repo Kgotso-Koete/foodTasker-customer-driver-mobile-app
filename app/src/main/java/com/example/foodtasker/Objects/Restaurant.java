@@ -1,3 +1,4 @@
+// ALL UPDATES COMPLETED
 package com.example.foodtasker.Objects;
 
 public class Restaurant {

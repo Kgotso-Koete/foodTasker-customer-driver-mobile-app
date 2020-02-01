@@ -1,3 +1,4 @@
+// ALL UPDATES COMPLETED
 package com.example.foodtasker.Activities;
 
 import android.content.Intent;
@@ -5,11 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ListView;
-import android.view.View;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.AdapterView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,7 +15,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.foodtasker.Adapters.MealAdapter;
 import com.example.foodtasker.Objects.Meal;
-import com.example.foodtasker.BuildConfig;
 import com.example.foodtasker.R;
 import com.google.gson.Gson;
 
@@ -34,9 +29,6 @@ public class MealListActivity extends AppCompatActivity {
 
     private ArrayList<Meal> mealArrayList;
     private MealAdapter adapter;
-
-    // TODO: Change API
-    String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +52,7 @@ public class MealListActivity extends AppCompatActivity {
     }
 
     private void getMeals(String restaurantId) {
-        String url = LOCAL_API_URL + "/customer/meals/" + restaurantId + "/";
+        String url = getString(R.string.API_URL) + "/customer/meals/" + restaurantId + "/";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
@@ -88,7 +80,6 @@ public class MealListActivity extends AppCompatActivity {
                         mealArrayList.clear();
                         mealArrayList.addAll(new ArrayList<Meal>(Arrays.asList(meals)));
                         adapter.notifyDataSetChanged();
-
                     }
                 },
                 new Response.ErrorListener() {

@@ -1,4 +1,4 @@
-// COMPLETED: ONLY URL API TO BE CHANGED
+// ALL UPDATES COMPLETED
 package com.example.foodtasker.Fragments;
 
 
@@ -56,7 +56,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
-import com.example.foodtasker.BuildConfig;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -71,9 +71,6 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
     private Timer timer = new Timer();
     private Marker driverMarker;
     private static final int DEFAULT_ZOOM = 15;
-
-    // TODO: Change API
-    String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
 
     public OrderFragment() {
         // Required empty public constructor
@@ -157,7 +154,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
 
     private void getLatestOrder() {
         SharedPreferences sharedPref = getActivity().getSharedPreferences("MY_KEY", Context.MODE_PRIVATE);
-        String url = LOCAL_API_URL + "/customer/order/latest/?access_token=" + sharedPref.getString("token", "");
+        String url = getString(R.string.API_URL) + "/customer/order/latest/?access_token=" + sharedPref.getString("token", "");
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
@@ -236,7 +233,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
 
     private void getDriverLocation() {
         SharedPreferences sharedPref = getActivity().getSharedPreferences("MY_KEY", Context.MODE_PRIVATE);
-        String url = LOCAL_API_URL + "/customer/driver/location/?access_token=" + sharedPref.getString("token", "");
+        String url = getString(R.string.API_URL) + "/customer/driver/location/?access_token=" + sharedPref.getString("token", "");
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,

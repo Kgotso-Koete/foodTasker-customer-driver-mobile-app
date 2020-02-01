@@ -1,3 +1,4 @@
+// ALL UPDATES COMPLETED
 package com.example.foodtasker.Utils;
 
 import android.graphics.Bitmap;

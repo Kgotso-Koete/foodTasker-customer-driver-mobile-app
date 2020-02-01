@@ -1,4 +1,4 @@
-// COMPLETED: ONLY URL API TO BE CHANGED
+// ALL UPDATES COMPLETED
 package com.example.foodtasker.Activities;
 
 import android.content.Context;
@@ -25,7 +25,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.foodtasker.BuildConfig;
 import com.example.foodtasker.Utils.CircleTransform;
 import com.example.foodtasker.Fragments.OrderFragment;
 import com.example.foodtasker.R;
@@ -37,15 +36,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import com.example.foodtasker.BuildConfig;
+
 public class CustomerMainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private SharedPreferences sharedPref;
 
-    String CLIENT_ID = BuildConfig.CLIENT_ID;
-    String CLIENT_SECRET = BuildConfig.CLIENT_SECRET;
-    // TODO: Change API
-    String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
+    public String CLIENT_ID = BuildConfig.CLIENT_ID;
+    public String CLIENT_SECRET = BuildConfig.CLIENT_SECRET;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +137,7 @@ public class CustomerMainActivity extends AppCompatActivity {
     }
 
     private void logoutToServer(final String token) {
-        String url = LOCAL_API_URL + "/social/revoke-token";
+        String url = getString(R.string.API_URL) + "/social/revoke-token";
 
         StringRequest postRequest = new StringRequest
                 (Request.Method.POST, url, new Response.Listener<String>() {

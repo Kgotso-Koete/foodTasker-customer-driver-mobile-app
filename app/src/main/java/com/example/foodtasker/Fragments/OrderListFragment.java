@@ -1,5 +1,6 @@
-// COMPLETED: ONLY URL API TO BE CHANGED
+// ALL UPDATES COMPLETED
 package com.example.foodtasker.Fragments;
+
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,8 +34,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import com.example.foodtasker.BuildConfig;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,9 +42,6 @@ public class OrderListFragment extends Fragment {
 
     private OrderAdapter adapter;
     private ArrayList<Order> orderList;
-
-    // TODO: Change API
-    String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
 
     public OrderListFragment() {
         // Required empty public constructor
@@ -74,7 +70,7 @@ public class OrderListFragment extends Fragment {
     }
 
     private void getReadyOrders() {
-        String url = LOCAL_API_URL + "/driver/orders/ready/";
+        String url = getString(R.string.API_URL) + "/driver/orders/ready/";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
