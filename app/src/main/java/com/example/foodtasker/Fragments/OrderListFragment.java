@@ -1,10 +1,11 @@
+// COMPLETED: ONLY URL API TO BE CHANGED
 package com.example.foodtasker.Fragments;
-
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,27 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
-//import com.example.foodtasker.Activities.MealListActivity;
-//import com.example.foodtasker.Adapters.OrderAdapter;
-//import com.example.foodtasker.Objects.Order;
-//import com.example.foodtasker.Objects.Restaurant;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.foodtasker.Activities.MealListActivity;
+import com.example.foodtasker.Adapters.OrderAdapter;
+import com.example.foodtasker.Objects.Order;
+import com.example.foodtasker.Objects.Restaurant;
 import com.example.foodtasker.R;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import com.example.foodtasker.BuildConfig;
 
 
 /**
@@ -25,6 +41,11 @@ import com.example.foodtasker.R;
  */
 public class OrderListFragment extends Fragment {
 
+    private OrderAdapter adapter;
+    private ArrayList<Order> orderList;
+
+    // TODO: Change API
+    String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
 
     public OrderListFragment() {
         // Required empty public constructor
@@ -42,36 +63,61 @@ public class OrderListFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ListView restaurantListView = (ListView) getActivity().findViewById(R.id.order_list);
-        restaurantListView.setAdapter(new BaseAdapter() {
-            @Override
-            public int getCount() {
-                return 3;
-            }
+        orderList = new ArrayList<Order>();
+        adapter = new OrderAdapter(this.getActivity(), orderList);
 
-            @Override
-            public Object getItem(int position) {
-                return null;
-            }
+        ListView orderListView = (ListView) getActivity().findViewById(R.id.order_list);
+        orderListView.setAdapter(adapter);
 
-            @Override
-            public long getItemId(int position) {
-                return 0;
-            }
+        // Get list of ready orders to be delivered
+        getReadyOrders();
+    }
 
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                return LayoutInflater.from(getActivity()).inflate(R.layout.list_item_order, null);
-            }
-        });
+    private void getReadyOrders() {
+        String url = LOCAL_API_URL + "/driver/orders/ready/";
 
-        restaurantListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getContext(), MealListActivity.class);
-                startActivity(intent);
-            }
-        });
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("READY ORDERS LIST", response.toString());
+
+                        // Get orders in JSONArray type
+                        try {
+                            JSONArray ordersJSONArray = response.getJSONArray("orders");
+                            for (int i = 0; i < ordersJSONArray.length(); i++) {
+                                JSONObject orderObject = ordersJSONArray.getJSONObject(i);
+
+                                Order order = new Order(
+                                        orderObject.getString("id"),
+                                        orderObject.getJSONObject("restaurant").getString("name"),
+                                        orderObject.getJSONObject("customer").getString("name"),
+                                        orderObject.getString("address"),
+                                        orderObject.getJSONObject("customer").getString("avatar")
+                                );
+                                orderList.add(order);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        // Update the ListView with fresh data
+                        adapter.notifyDataSetChanged();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        );
+
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        queue.add(jsonObjectRequest);
     }
 
 }
