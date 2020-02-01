@@ -1,3 +1,5 @@
+// COMPLETED: ONLY URL API TO BE CHANGED
+
 package com.example.foodtasker.Fragments;
 
 import android.content.Context;
@@ -75,7 +77,6 @@ import java.util.Map;
 import com.example.foodtasker.BuildConfig;
 
 
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -86,6 +87,7 @@ public class DeliveryFragment extends Fragment implements OnMapReadyCallback {
     private ImageView customerImage;
 
     private GoogleMap mMap;
+
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private boolean mLocationPermissionGranted;
@@ -93,12 +95,10 @@ public class DeliveryFragment extends Fragment implements OnMapReadyCallback {
     private Marker driverMarker;
 
     private LocationCallback mLocationCallback;
-
     private String orderId;
 
     // TODO: Change API
     String LOCAL_API_URL = BuildConfig.LOCAL_API_URL;
-
 
     public DeliveryFragment() {
         // Required empty public constructor
@@ -129,6 +129,9 @@ public class DeliveryFragment extends Fragment implements OnMapReadyCallback {
 
         // Get the latest order details
         getLatestOrder();
+
+        // Handle the Complete Order Button
+        handleButtonCompleteOrder();
     }
 
     private void getLatestOrder() {
@@ -286,7 +289,7 @@ public class DeliveryFragment extends Fragment implements OnMapReadyCallback {
                                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.pin_car))
                                 );
 
-
+                                updateDriverLocation(mLastKnownLocation.getLatitude() + "," + mLastKnownLocation.getLongitude()); // "-31.0032,153.000"
                             }
                         }
                     }
@@ -331,7 +334,6 @@ public class DeliveryFragment extends Fragment implements OnMapReadyCallback {
                 mLocationRequest.setFastestInterval(500);
                 mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-
                 // STEP 2: Define the location update callback
                 mLocationCallback = new LocationCallback() {
                     @Override
@@ -342,6 +344,7 @@ public class DeliveryFragment extends Fragment implements OnMapReadyCallback {
 
                         for (Location location : locationResult.getLocations()) {
                             // update UI with location data
+
                             LatLng pos = new LatLng(location.getLatitude(), location.getLongitude());
                             try {
                                 driverMarker.remove();
@@ -353,12 +356,13 @@ public class DeliveryFragment extends Fragment implements OnMapReadyCallback {
                                     .title("Driver Location")
                                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.pin_car))
                             );
+                            updateDriverLocation(location.getLatitude() + "," + location.getLongitude());
 
                             Log.d("NEW DRIVER LOCATION:", Double.toString(pos.latitude) + "," + Double.toString(pos.longitude));
+
                         }
                     }
                 };
-
 
                 // STEP 3: Request location updates
                 mFusedLocationProviderClient.requestLocationUpdates(
@@ -366,7 +370,6 @@ public class DeliveryFragment extends Fragment implements OnMapReadyCallback {
                         mLocationCallback,
                         null
                 );
-
             }
 
         } catch (SecurityException e) {
@@ -382,5 +385,120 @@ public class DeliveryFragment extends Fragment implements OnMapReadyCallback {
         mFusedLocationProviderClient.removeLocationUpdates(mLocationCallback);
     }
 
+    private void updateDriverLocation(final String location) {
+        String url = LOCAL_API_URL + "/driver/location/update/";
 
+        StringRequest postRequest = new StringRequest
+                (Request.Method.POST, url, new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                        // Execute code
+                        Log.d("UPDATE DRIVER LOCATION", response);
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+                        // Enable the Place Order Button
+                        Log.d("ERROR MESSAGE", error.toString());
+
+                    }
+                }) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                final SharedPreferences sharedPref = getActivity().getSharedPreferences("MY_KEY", Context.MODE_PRIVATE);
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("access_token", sharedPref.getString("token", ""));
+                params.put("location", location);
+
+                return params;
+            }
+        };
+
+        postRequest.setRetryPolicy(
+                new DefaultRetryPolicy(
+                        0,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        );
+
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        queue.add(postRequest);
+    }
+
+    private void handleButtonCompleteOrder() {
+        Button buttonCompleteOrder = (Button) getActivity().findViewById(R.id.button_complete_order);
+        buttonCompleteOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // Show an alert
+                AlertDialog.Builder builder = new AlertDialog.Builder((getActivity()));
+                builder.setTitle("Complete Order");
+                builder.setMessage("Is this order completed?");
+                builder.setPositiveButton("Cancel", null);
+                builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        completeOrder(orderId);
+                    }
+                });
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
+        });
+    }
+
+    private void completeOrder(final String orderId) {
+        String url = LOCAL_API_URL + "/driver/order/complete/";
+
+        StringRequest postRequest = new StringRequest
+                (Request.Method.POST, url, new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                        // Execute code
+                        Log.d("ORDER COMPLETED", response);
+
+                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.content_frame, new OrderListFragment()).commit();
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+                        // Enable the Place Order Button
+                        Log.d("ERROR MESSAGE", error.toString());
+
+                    }
+                }) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                final SharedPreferences sharedPref = getActivity().getSharedPreferences("MY_KEY", Context.MODE_PRIVATE);
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("access_token", sharedPref.getString("token", ""));
+                params.put("order_id", orderId);
+
+                return params;
+            }
+        };
+
+        postRequest.setRetryPolicy(
+                new DefaultRetryPolicy(
+                        0,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        );
+
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        queue.add(postRequest);
+    }
 }
