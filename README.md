@@ -4,7 +4,7 @@ Foodtasker is an UberEats clone in which customers can order takeaway food on th
 
 ---
 
-### Click here for the video [demo](http://80hr-prototype.com/). Feel free to download APK file below for testing
+### Click here for the video [demo](http://80hr-prototype.com/). Feel free to [download APK file here](https://github.com/Kgotso-Koete/foodTasker-customer-driver-mobile-app/blob/master/app-debug.apk) for testing
 
 ---
 
