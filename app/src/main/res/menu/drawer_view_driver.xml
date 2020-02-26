@@ -11,6 +11,12 @@
         android:id="@+id/nav_statistic"
         android:icon="@drawable/icon_statistic"
         android:title="@string/statistics" />
+
+    <item
+        android:id="@+id/nav_driver_order_history"
+        android:icon="@android:drawable/sym_contact_card"
+        android:title="@string/driver_order_history" />
+
     <item
         android:id="@+id/nav_logout"
         android:icon="@drawable/icon_logout"

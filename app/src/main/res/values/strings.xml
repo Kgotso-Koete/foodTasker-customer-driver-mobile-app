@@ -10,6 +10,7 @@
     <string name="restaurant">Restaurant</string>
     <string name="tray">Tray</string>
     <string name="order">Order</string>
+    <string name="customer_order_history">Your order history</string>
     <string name="logout">Logout</string>
     <string name="kgotso_koete">Kgotso Koete</string>
     <string name="todo2">TODO2</string>
@@ -37,6 +38,7 @@
     <string name="driver_orders">Orders</string>
     <string name="driver_delivery">Delivery</string>
     <string name="statistics">Statistics</string>
+    <string name="driver_order_history">Your order history</string>
     <string name="driver_logout">Logout</string>
     <string name="restaurant_name_">Restaurant Name</string>
     <string name="customer_name_">Customer Name</string>
