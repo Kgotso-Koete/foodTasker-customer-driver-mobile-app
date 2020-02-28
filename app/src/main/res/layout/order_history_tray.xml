@@ -8,9 +8,11 @@
         android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:layout_marginRight="15dp"
+        android:background="@color/colorPrimaryDark"
         android:padding="10dp"
         android:text="@string/_1"
         android:textAlignment="center"
+        android:textColor="#FFFFFF"
         android:textSize="17sp" />
 
     <TextView
@@ -21,6 +23,8 @@
         android:layout_weight="1"
         android:padding="10dp"
         android:text="@string/burger_king"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="#FFFFFF"
         android:textSize="17sp" />
 
     <TextView
@@ -29,5 +33,7 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:text="@string/_10_00"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="#FFFFFF"
         android:textSize="17sp" />
 </LinearLayout>

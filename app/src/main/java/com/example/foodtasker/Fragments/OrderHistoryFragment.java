@@ -1,4 +1,4 @@
-
+// WITH HELP FROM: https://www.androidhive.info/2013/07/android-expandable-list-view-tutorial/
 package com.example.foodtasker.Fragments;
 
 
@@ -60,7 +60,7 @@ public class OrderHistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.activity_main, container, false);
+        return inflater.inflate(R.layout.fragment_order_history, container, false);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class OrderHistoryFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         // get the listview
-        expListView = (ExpandableListView) getActivity().findViewById(R.id.lvExp);
+        expListView = (ExpandableListView) getActivity().findViewById(R.id.order_history_list);
 
         // preparing list data
         prepareListData();
@@ -102,7 +102,8 @@ public class OrderHistoryFragment extends Fragment {
                                 // add parent data
                                 String orderId = orderObject.getString("id");
                                 String header = orderObject.getJSONObject("restaurant").getString("name");
-                                listDataHeader.add("Order number: " + orderId + " " + header);
+                                String orderListHeading = "Order: #" + orderId + " " + header;
+                                listDataHeader.add(orderListHeading);
 
                                 // add child data
                                 /////////////////////////////////////////////////////////////////////////////////

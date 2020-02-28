@@ -1,4 +1,4 @@
-
+// WITH HELP FROM: https://www.androidhive.info/2013/07/android-expandable-list-view-tutorial/
 package com.example.foodtasker.Adapters;
 
 import java.util.HashMap;
@@ -49,11 +49,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         if (convertView == null) {
             infalInflater = (LayoutInflater) _context.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.list_item, null);
+            convertView = infalInflater.inflate(R.layout.order_history_tray, null);
         }
 
-        TextView txtListChild = (TextView) convertView
-                .findViewById(R.id.lblListItem);
+        TextView txtListChild = (TextView) convertView.findViewById(R.id.history_tray_meal_name);
 
         txtListChild.setText(childText);
         return convertView;
@@ -86,12 +85,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         String headerTitle = (String) getGroup(groupPosition);
         if (convertView == null) {
             infalInflater = (LayoutInflater) _context.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.list_group, null);
+            convertView = infalInflater.inflate(R.layout.list_item_order_history, null);
         }
 
-        TextView lblListHeader = (TextView) convertView
-                .findViewById(R.id.lblListHeader);
-        lblListHeader.setTypeface(null, Typeface.BOLD);
+        TextView lblListHeader = (TextView) convertView.findViewById(R.id.restaurant_name);
         lblListHeader.setText(headerTitle);
 
         return convertView;
