@@ -57,7 +57,7 @@ This code is for the Customer and Driver front-end mobile app.
 - Order page: List of restaurants and their addresses
     - List of items last ordered (URL: `GET baseURL/api/customer/order/latest/?access_token={{access_token}}`): List of items recently ordered
     - Show driver location on map (URL: `GET baseURL/api/customer/driver/location/?access_token={{access_token}}`): Each meal can be added to the checkout tray
-
+- Order history page (URL: `GET /api/customer/order/history/?access_token={{access_token}}`): History of orders delivered to date
 
 ### Driver pages
 
@@ -69,7 +69,8 @@ This code is for the Customer and Driver front-end mobile app.
     - List of items last ordered (URL: `GET /api/driver/order/latest/?access_token={{access_token}}?order_id={{order_id}}`): List of items recently picked
     - Show driver location on map (URL: `GET baseURL/api/customer/driver/location/?access_token={{access_token}}`)
     - Mark order as 'Complete' (URL: `GET baseURL/api/driver/order/complete/?access_token={{access_token}}?order_id={{order_id}}`): Each meal can be added to the checkout tray
-- Statistics page (URL: `POST /api/driver/revenue/?access_token={{access_token}}`): Driver's weekly revenue statistics
+- Order history page (URL: `GET /api/driver/order/history/?access_token={{access_token}}`): History of orders delivered to date
+- Statistics page (URL: `GET /api/driver/revenue/?access_token={{access_token}}`): Driver's weekly revenue statistics
 
 ---
 
@@ -119,7 +120,7 @@ Stripe payment API was used (using test keys and test tokens)
 - Back end
 
   - Version 1 (Code4Startup Tutorial): 65 hours
-  - Version 2 (personal modifications): x hours (email + password login, if only I could find the time goodness)
+  - Version 2 (personal modifications): 16 hours (Order history edits - this took way too long!)
 
 ---
 
