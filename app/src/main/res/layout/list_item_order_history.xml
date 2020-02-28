@@ -54,4 +54,10 @@
             app:layout_constraintStart_toEndOf="@+id/customer_image"
             app:layout_constraintTop_toBottomOf="@+id/customer_name" />
     </android.support.constraint.ConstraintLayout>
+
+    <ListView
+        android:id="@+id/order_history_tray"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </LinearLayout>

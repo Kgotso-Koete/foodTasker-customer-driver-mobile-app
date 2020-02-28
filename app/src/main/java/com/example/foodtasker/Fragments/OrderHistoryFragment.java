@@ -2,69 +2,86 @@
 package com.example.foodtasker.Fragments;
 
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
+import com.example.foodtasker.Adapters.ExpandableListAdapter;
+import com.example.foodtasker.R;
+
+import java.util.ArrayList;
+
+import java.util.HashMap;
+import java.util.List;
+
+import android.widget.ExpandableListView;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.foodtasker.Adapters.OrderHistoryAdapter;
-import com.example.foodtasker.Objects.Order;
-import com.example.foodtasker.R;
+
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class OrderHistoryFragment extends Fragment {
 
-    private OrderHistoryAdapter adapter;
-    private ArrayList<Order> orderList;
+    ExpandableListAdapter listAdapter;
+    ExpandableListView expListView;
+    List<String> listDataHeader;
+    HashMap<String, List<String>> listDataChild;
+    private JSONArray ordersJSONArray;
+
+    List<String> TestDataHeader;
+
 
     public OrderHistoryFragment() {
         // Required empty public constructor
+        listDataHeader = new ArrayList<String>();
+        listDataChild = new HashMap<String, List<String>>();
+        ordersJSONArray = new JSONArray();
+        TestDataHeader = new ArrayList<String>();
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_order_history, container, false);
+        return inflater.inflate(R.layout.activity_main, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        orderList = new ArrayList<Order>();
-        adapter = new OrderHistoryAdapter(this.getActivity(), orderList);
+        // get the listview
+        expListView = (ExpandableListView) getActivity().findViewById(R.id.lvExp);
 
-        ListView orderListView = (ListView) getActivity().findViewById(R.id.order_history_list);
-        orderListView.setAdapter(adapter);
+        // preparing list data
+        prepareListData();
 
-        // Get list of ready orders to be delivered
-        getReadyOrders();
+        listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
+
+        // setting list adapter
+        expListView.setAdapter(listAdapter);
+
     }
 
-    private void getReadyOrders() {
+    private void prepareListData() {
+
         SharedPreferences sharedPref = getActivity().getSharedPreferences("MY_KEY", Context.MODE_PRIVATE);
         String url = getString(R.string.API_URL) + "/driver/order/history/?access_token=" + sharedPref.getString("token", "");
 
@@ -75,29 +92,42 @@ public class OrderHistoryFragment extends Fragment {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("ORDER HISTORY LIST", response.toString());
 
                         // Get orders in JSONArray type
                         try {
-                            JSONArray ordersJSONArray = response.getJSONArray("order_history");
+                            ordersJSONArray = response.getJSONArray("order_history");
+
                             for (int i = 0; i < ordersJSONArray.length(); i++) {
                                 JSONObject orderObject = ordersJSONArray.getJSONObject(i);
+                                // add parent data
+                                String orderId = orderObject.getString("id");
+                                String header = orderObject.getJSONObject("restaurant").getString("name");
+                                listDataHeader.add("Order number: " + orderId + " " + header);
 
-                                Order order = new Order(
-                                        orderObject.getString("id"),
-                                        orderObject.getJSONObject("restaurant").getString("name"),
-                                        orderObject.getJSONObject("customer").getString("name"),
-                                        orderObject.getString("address"),
-                                        orderObject.getJSONObject("customer").getString("avatar")
-                                );
-                                orderList.add(order);
+                                // add child data
+                                /////////////////////////////////////////////////////////////////////////////////
+                                List<String> Header = new ArrayList<String>();
+                                try {
+                                    JSONArray trayJSONArray = orderObject.getJSONArray("order_details");
+
+                                    for (int j = 0; j < trayJSONArray.length(); j++) {
+                                        JSONObject trayObject = trayJSONArray.getJSONObject(j);
+                                        String trayItem = trayObject.getJSONObject("meal").getString("name");
+                                        Header.add(trayItem);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                listDataChild.put(listDataHeader.get(i), Header);
+
+                                // add child data
+                                /////////////////////////////////////////////////////////////////////////
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
 
-                        // Update the ListView with fresh data
-                        adapter.notifyDataSetChanged();
+                        listAdapter.notifyDataSetChanged();
                     }
                 },
                 new Response.ErrorListener() {
@@ -107,7 +137,6 @@ public class OrderHistoryFragment extends Fragment {
                     }
                 }
         );
-
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         queue.add(jsonObjectRequest);
     }

@@ -5,7 +5,7 @@
     android:background="@color/colorPrimaryDark"
     tools:context=".Fragments.OrderHistoryFragment">
 
-    <ListView
+    <ExpandableListView
         android:id="@+id/order_history_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
