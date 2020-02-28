@@ -28,7 +28,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.foodtasker.Utils.CircleTransform;
 import com.example.foodtasker.Fragments.DeliveryFragment;
 import com.example.foodtasker.Fragments.OrderListFragment;
-import com.example.foodtasker.Fragments.OrderHistoryFragment;
+import com.example.foodtasker.Fragments.DriverHistoryFragment;
 import com.example.foodtasker.R;
 import com.example.foodtasker.Fragments.StatisticFragment;
 import com.squareup.picasso.Picasso;
@@ -82,7 +82,7 @@ public class DriverMainActivity extends AppCompatActivity {
                         } else if (id == R.id.nav_statistic) {
                             transaction.replace(R.id.content_frame, new StatisticFragment()).commit();
                         } else if (id == R.id.nav_driver_order_history) {
-                            transaction.replace(R.id.content_frame, new OrderHistoryFragment()).commit();
+                            transaction.replace(R.id.content_frame, new DriverHistoryFragment()).commit();
                         } else if (id == R.id.nav_logout) {
                             logoutToServer(sharedPref.getString("token", ""));
                             SharedPreferences.Editor editor = sharedPref.edit();

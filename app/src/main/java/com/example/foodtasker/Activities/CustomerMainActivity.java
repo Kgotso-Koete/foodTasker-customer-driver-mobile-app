@@ -25,6 +25,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.foodtasker.Fragments.CustomerHistoryFragment;
 import com.example.foodtasker.Utils.CircleTransform;
 import com.example.foodtasker.Fragments.OrderFragment;
 import com.example.foodtasker.R;
@@ -81,6 +82,8 @@ public class CustomerMainActivity extends AppCompatActivity {
                             transaction.replace(R.id.content_frame, new TrayFragment()).commit();
                         } else if (id == R.id.nav_order) {
                             transaction.replace(R.id.content_frame, new OrderFragment()).commit();
+                        } else if (id == R.id.nav_customer_order_history) {
+                            transaction.replace(R.id.content_frame, new CustomerHistoryFragment()).commit();
                         } else if (id == R.id.nav_logout) {
                             logoutToServer(sharedPref.getString("token", ""));
                             SharedPreferences.Editor editor = sharedPref.edit();

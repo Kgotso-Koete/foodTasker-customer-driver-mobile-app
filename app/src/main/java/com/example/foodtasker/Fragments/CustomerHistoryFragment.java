@@ -2,44 +2,39 @@
 package com.example.foodtasker.Fragments;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.example.foodtasker.Adapters.ExpandableListAdapter;
-import com.example.foodtasker.R;
-
-import java.util.ArrayList;
-
-import java.util.HashMap;
-import java.util.List;
-
 import android.widget.ExpandableListView;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.foodtasker.Adapters.ExpandableListAdapter;
+import com.example.foodtasker.Objects.HistoryItem;
+import com.example.foodtasker.Objects.Order;
+import com.example.foodtasker.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.foodtasker.Objects.Order;
-import com.example.foodtasker.Objects.HistoryItem;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class OrderHistoryFragment extends Fragment {
+public class CustomerHistoryFragment extends Fragment {
 
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
@@ -50,7 +45,7 @@ public class OrderHistoryFragment extends Fragment {
     List<String> TestDataHeader;
 
 
-    public OrderHistoryFragment() {
+    public CustomerHistoryFragment() {
         // Required empty public constructor
         listDataHeader = new ArrayList<Order>();
         listDataChild = new HashMap<Order, List<HistoryItem>>();
@@ -75,7 +70,7 @@ public class OrderHistoryFragment extends Fragment {
         // preparing list data
         prepareListData();
 
-        listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
+        listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild);
 
         // setting list adapter
         expListView.setAdapter(listAdapter);
@@ -85,7 +80,7 @@ public class OrderHistoryFragment extends Fragment {
     private void prepareListData() {
 
         SharedPreferences sharedPref = getActivity().getSharedPreferences("MY_KEY", Context.MODE_PRIVATE);
-        String url = getString(R.string.API_URL) + "/driver/order/history/?access_token=" + sharedPref.getString("token", "");
+        String url = getString(R.string.API_URL) + "/customer/order/history/?access_token=" + sharedPref.getString("token", "");
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
@@ -106,9 +101,9 @@ public class OrderHistoryFragment extends Fragment {
                                 Order orderListHeading = new Order(
                                         orderObject.getString("id"),
                                         orderObject.getJSONObject("restaurant").getString("name"),
-                                        orderObject.getJSONObject("customer").getString("name"),
-                                        orderObject.getString("address"),
-                                        orderObject.getJSONObject("customer").getString("avatar")
+                                        "Your driver was: " + orderObject.getJSONObject("driver").getString("name"),
+                                        "Address: " + orderObject.getString("address"),
+                                        orderObject.getJSONObject("driver").getString("avatar")
                                 );
                                 listDataHeader.add(orderListHeading);
 
@@ -148,7 +143,6 @@ public class OrderHistoryFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
                     }
                 }
         );

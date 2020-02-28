@@ -1,42 +1,34 @@
 // WITH HELP FROM: https://www.androidhive.info/2013/07/android-expandable-list-view-tutorial/
 package com.example.foodtasker.Adapters;
 
-import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
-import com.example.foodtasker.Fragments.OrderHistoryFragment;
+import com.example.foodtasker.Fragments.DriverHistoryFragment;
 import com.example.foodtasker.R;
 import com.example.foodtasker.Objects.Order;
 import com.example.foodtasker.Objects.HistoryItem;
 
 import android.widget.ImageView;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
-
-import org.json.JSONObject;
-
-import android.util.Log;
 
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
-    private OrderHistoryFragment _context;
+    private Context _context;
     private List<Order> _listDataHeader; // header titles
     // child data in format of header title, child title
     private HashMap<Order, List<HistoryItem>> _listDataChild;
     private LayoutInflater infalInflater;
 
-    public ExpandableListAdapter(OrderHistoryFragment context, List<Order> listDataHeader,
+    public ExpandableListAdapter(Context context, List<Order> listDataHeader,
                                  HashMap<Order, List<HistoryItem>> listChildData) {
         this._context = context;
         this._listDataHeader = listDataHeader;
@@ -59,7 +51,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                              boolean isLastChild, View convertView, ViewGroup parent) {
         // final String childText = (String) getChild(groupPosition, childPosition);
         if (convertView == null) {
-            infalInflater = (LayoutInflater) _context.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            infalInflater = (LayoutInflater) this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.order_history_tray, null);
         }
 
@@ -103,7 +95,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                              View convertView, ViewGroup parent) {
         //String headerTitle = (String) getGroup(groupPosition);
         if (convertView == null) {
-            infalInflater = (LayoutInflater) _context.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            infalInflater = (LayoutInflater) this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.list_item_order_history, null);
         }
 
@@ -113,12 +105,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         ImageView customerImage = (ImageView) convertView.findViewById(R.id.customer_image);
 
         final Order order = _listDataHeader.get(groupPosition);
-        Log.d("ORDER HEADER ADDED", order.toString());
 
         restaurantName.setText(order.getRestaurantName());
         customerName.setText(order.getCustomerName());
         customerAddress.setText(order.getCustomerAddress());
-        Picasso.with(_context.getContext()).load(order.getCustomerImage()).fit().into(customerImage);
+        Picasso.with(this._context).load(order.getCustomerImage()).fit().into(customerImage);
 
         return convertView;
     }
