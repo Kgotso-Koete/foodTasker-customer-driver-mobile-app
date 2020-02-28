@@ -28,11 +28,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.example.foodtasker.Objects.Order;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,8 +41,8 @@ public class OrderHistoryFragment extends Fragment {
 
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
-    List<String> listDataHeader;
-    HashMap<String, List<String>> listDataChild;
+    List<Order> listDataHeader;
+    HashMap<Order, List<String>> listDataChild;
     private JSONArray ordersJSONArray;
 
     List<String> TestDataHeader;
@@ -50,8 +50,8 @@ public class OrderHistoryFragment extends Fragment {
 
     public OrderHistoryFragment() {
         // Required empty public constructor
-        listDataHeader = new ArrayList<String>();
-        listDataChild = new HashMap<String, List<String>>();
+        listDataHeader = new ArrayList<Order>();
+        listDataChild = new HashMap<Order, List<String>>();
         ordersJSONArray = new JSONArray();
         TestDataHeader = new ArrayList<String>();
     }
@@ -100,9 +100,14 @@ public class OrderHistoryFragment extends Fragment {
                             for (int i = 0; i < ordersJSONArray.length(); i++) {
                                 JSONObject orderObject = ordersJSONArray.getJSONObject(i);
                                 // add parent data
-                                String orderId = orderObject.getString("id");
-                                String header = orderObject.getJSONObject("restaurant").getString("name");
-                                String orderListHeading = "Order: #" + orderId + " " + header;
+
+                                Order orderListHeading = new Order(
+                                        orderObject.getString("id"),
+                                        orderObject.getJSONObject("restaurant").getString("name"),
+                                        orderObject.getJSONObject("customer").getString("name"),
+                                        orderObject.getString("address"),
+                                        orderObject.getJSONObject("customer").getString("avatar")
+                                );
                                 listDataHeader.add(orderListHeading);
 
                                 // add child data
