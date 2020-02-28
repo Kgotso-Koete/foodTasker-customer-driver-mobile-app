@@ -27,32 +27,34 @@
             android:id="@+id/customer_image"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_marginStart="15dp"
+            android:contentDescription="@string/customer_profile_image"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/ic_launcher"
-            android:contentDescription="@string/customer_profile_image" />
-
-        <TextView
-            android:id="@+id/customer_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:text="@string/customer_name_"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/customer_image"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:srcCompat="@mipmap/ic_launcher" />
 
         <TextView
             android:id="@+id/customer_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="8dp"
             android:text="@string/customer_address_"
             app:layout_constraintStart_toEndOf="@+id/customer_image"
             app:layout_constraintTop_toBottomOf="@+id/customer_name" />
+
+        <TextView
+            android:id="@+id/customer_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/customer_name_"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/customer_image"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </android.support.constraint.ConstraintLayout>
 
     <ListView

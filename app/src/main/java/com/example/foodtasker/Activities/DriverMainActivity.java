@@ -4,6 +4,8 @@ package com.example.foodtasker.Activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
@@ -55,7 +57,11 @@ public class DriverMainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.drawable.icon_menu_24dp);
+
+        final Drawable menuBurger = getResources().getDrawable(R.drawable.icon_menu_24dp);
+        getSupportActionBar().setHomeAsUpIndicator(menuBurger);
+        menuBurger.setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
+
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mDrawerLayout = findViewById(R.id.drawer_layout_driver);
