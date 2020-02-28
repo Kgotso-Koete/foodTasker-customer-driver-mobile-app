@@ -1,6 +1,7 @@
 // WITH HELP FROM: https://www.androidhive.info/2013/07/android-expandable-list-view-tutorial/
 package com.example.foodtasker.Adapters;
 
+import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,9 +16,12 @@ import android.widget.TextView;
 import com.example.foodtasker.Fragments.OrderHistoryFragment;
 import com.example.foodtasker.R;
 import com.example.foodtasker.Objects.Order;
+import com.example.foodtasker.Objects.HistoryItem;
 
 import android.widget.ImageView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
@@ -29,11 +33,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private OrderHistoryFragment _context;
     private List<Order> _listDataHeader; // header titles
     // child data in format of header title, child title
-    private HashMap<Order, List<String>> _listDataChild;
+    private HashMap<Order, List<HistoryItem>> _listDataChild;
     private LayoutInflater infalInflater;
 
     public ExpandableListAdapter(OrderHistoryFragment context, List<Order> listDataHeader,
-                                 HashMap<Order, List<String>> listChildData) {
+                                 HashMap<Order, List<HistoryItem>> listChildData) {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
@@ -53,17 +57,22 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
-
-        final String childText = (String) getChild(groupPosition, childPosition);
-
+        // final String childText = (String) getChild(groupPosition, childPosition);
         if (convertView == null) {
             infalInflater = (LayoutInflater) _context.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.order_history_tray, null);
         }
 
-        TextView txtListChild = (TextView) convertView.findViewById(R.id.history_tray_meal_name);
+        TextView mealQuantity = (TextView) convertView.findViewById(R.id.history_tray_meal_quantity);
+        TextView mealName = (TextView) convertView.findViewById(R.id.history_tray_meal_name);
+        TextView mealSubTotal = (TextView) convertView.findViewById(R.id.history_tray_meal_subtotal);
 
-        txtListChild.setText(childText);
+        List<HistoryItem> mealList = _listDataChild.get(_listDataHeader.get(groupPosition));
+        final HistoryItem trayItem = mealList.get(childPosition);
+
+        mealQuantity.setText(trayItem.getMealQuantity());
+        mealName.setText(trayItem.getMealName());
+        mealSubTotal.setText(trayItem.getMealSubTotal());
 
         return convertView;
     }
@@ -104,7 +113,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         ImageView customerImage = (ImageView) convertView.findViewById(R.id.customer_image);
 
         final Order order = _listDataHeader.get(groupPosition);
-        Log.d("ORDER PASSED TO ADAPTOR", order.toString());
+        Log.d("ORDER HEADER ADDED", order.toString());
+
         restaurantName.setText(order.getRestaurantName());
         customerName.setText(order.getCustomerName());
         customerAddress.setText(order.getCustomerAddress());

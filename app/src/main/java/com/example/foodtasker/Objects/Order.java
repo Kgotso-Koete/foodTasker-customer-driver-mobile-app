@@ -35,4 +35,9 @@ public class Order {
     public String getCustomerImage() {
         return customerImage;
     }
+
+    @Override
+    public String toString() {
+        return restaurantName;
+    }
 }

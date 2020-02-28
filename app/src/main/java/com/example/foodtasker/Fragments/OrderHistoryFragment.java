@@ -5,6 +5,7 @@ package com.example.foodtasker.Fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.example.foodtasker.Objects.Order;
+import com.example.foodtasker.Objects.HistoryItem;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,7 +44,7 @@ public class OrderHistoryFragment extends Fragment {
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
     List<Order> listDataHeader;
-    HashMap<Order, List<String>> listDataChild;
+    HashMap<Order, List<HistoryItem>> listDataChild;
     private JSONArray ordersJSONArray;
 
     List<String> TestDataHeader;
@@ -51,7 +53,7 @@ public class OrderHistoryFragment extends Fragment {
     public OrderHistoryFragment() {
         // Required empty public constructor
         listDataHeader = new ArrayList<Order>();
-        listDataChild = new HashMap<Order, List<String>>();
+        listDataChild = new HashMap<Order, List<HistoryItem>>();
         ordersJSONArray = new JSONArray();
         TestDataHeader = new ArrayList<String>();
     }
@@ -112,13 +114,20 @@ public class OrderHistoryFragment extends Fragment {
 
                                 // add child data
                                 /////////////////////////////////////////////////////////////////////////////////
-                                List<String> Header = new ArrayList<String>();
+                                List<HistoryItem> Header = new ArrayList<HistoryItem>();
                                 try {
                                     JSONArray trayJSONArray = orderObject.getJSONArray("order_details");
 
                                     for (int j = 0; j < trayJSONArray.length(); j++) {
                                         JSONObject trayObject = trayJSONArray.getJSONObject(j);
-                                        String trayItem = trayObject.getJSONObject("meal").getString("name");
+
+                                        HistoryItem trayItem = new HistoryItem(
+                                                trayObject.getString("id"),
+                                                trayObject.getJSONObject("meal").getString("name"),
+                                                trayObject.getString("quantity"),
+                                                trayObject.getString("sub_total")
+                                        );
+
                                         Header.add(trayItem);
                                     }
                                 } catch (JSONException e) {
