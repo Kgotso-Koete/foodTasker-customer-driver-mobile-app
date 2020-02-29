@@ -14,6 +14,23 @@ Android SDK using Java, Authentication using Facebook and JWT, payments using St
 
 ---
 
+# Screen shot of the application: Customer pages
+
+![](/screenshots/customer/foodTasker_login.jpg)
+![](/screenshots/customer/foodtasker_meal.jpg)
+![](/screenshots/customer/foodtasker_menu.jpg)
+![](/screenshots/customer/foodtasker_payment.jpg)
+![](/screenshots/customer/foodtasker_restaurants.jpg)
+![](/screenshots/customer/foodtasker_status.jpg)
+![](/screenshots/customer/foodtasker_tray.jpg)
+
+# Screen shot of the application: Driver pages
+
+![](/screenshots/driver/foodtasker_menu.jpg)
+![](/screenshots/driver/foodtasker_pick_order.jpg)
+
+---
+
 ### Application overview and link to related code bases
 
 The combined application consists of 4 components:
