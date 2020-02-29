@@ -16,16 +16,25 @@ Android SDK using Java, Authentication using Facebook and JWT, payments using St
 
 # Screen shot of the application: Customer pages
 
-Solarized dark             |  Solarized Ocean
-:-------------------------:|:-------------------------:
-![](/screenshots/customer/foodTasker_login.jpg)  |  ![](/screenshots/customer/foodtasker_meal.jpg)
+Login                                              |  Restaurant
+:-------------------------------------------------:|:-------------------------:
+![](/screenshots/customer/foodTasker_login.jpg)    |  ![](/screenshots/customer/foodtasker_menu.jpg)
 
-![](/screenshots/customer/foodTasker_login.jpg) | ![](/screenshots/customer/foodtasker_meal.jpg) | ![](/screenshots/customer/foodtasker_menu.jpg)
-![](/screenshots/customer/foodtasker_payment.jpg) | ![](/screenshots/customer/foodtasker_restaurants.jpg) | ![](/screenshots/customer/foodtasker_tray.jpg) | ![](/screenshots/customer/foodtasker_status.jpg)
+Meal                                               |  Tray
+:-------------------------------------------------:|:-------------------------:
+![](/screenshots/customer/foodtasker_meal.jpg)     |  ![](/screenshots/customer/foodtasker_tray.jpg)
+
+Payment                                            |  Status
+:-------------------------------------------------:|:-------------------------:
+![](/screenshots/customer/foodtasker_payment.jpg)  |  ![](/screenshots/customer/foodtasker_status.jpg)
+
 
 # Screen shot of the application: Driver pages
 
-![](/screenshots/driver/foodtasker_menu.jpg) | ![](/screenshots/driver/foodtasker_pick_order.jpg)
+Menu                                               |  Pick order
+:-------------------------------------------------:|:-------------------------:
+![](/screenshots/driver/foodtasker_menu.jpg)       |  ![](/screenshots/driver/foodtasker_pick_order.jpg)
+
 
 ---
 
